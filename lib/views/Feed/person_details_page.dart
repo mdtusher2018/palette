@@ -114,27 +114,33 @@ class PersonDetailsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     // Badges
-                    sectionHeader("Badges", ontap: () {
-                      navigateToPage(BadgesPage(
-                        id: id,
-                      ));
-                    }),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 100,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: data.badges.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 12),
-                        itemBuilder: (context, index) {
-                          return badgesCard(
-                            imageUrl:
-                                getFullImagePath(data.badges[index].image),
-                            name: data.badges[index].title,
-                          );
-                        },
+                    if (controller.badge.isNotEmpty)
+                      Column(
+                        children: [
+                          sectionHeader("Badges", ontap: () {
+                            navigateToPage(BadgesPage(
+                              id: id,
+                            ));
+                          }),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            height: 100,
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: data.badges.length,
+                              separatorBuilder: (_, __) =>
+                                  const SizedBox(width: 12),
+                              itemBuilder: (context, index) {
+                                return badgesCard(
+                                  imageUrl: getFullImagePath(
+                                      data.badges[index].image),
+                                  name: data.badges[index].title,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
                     const SizedBox(height: 16),
                     Row(
                       children: [
@@ -172,7 +178,7 @@ class PersonDetailsPage extends StatelessWidget {
                             profileImage: data.image,
                             profileName: data.fullName,
                             menuImagePath: log.image,
-                            name: log.itemName ?? "",
+                            name: log.itemName ?? "N/A",
                             time: getTimeDifference(log.createdAt.toString()),
                             resturant: log.restaurent,
                             ratting: log.rating.toString(),
@@ -211,6 +217,9 @@ class PersonDetailsPage extends StatelessWidget {
   }
 
   Widget statsCard(String label, String count) {
+    if (count.isEmpty) {
+      count = "N/A";
+    }
     return Expanded(
       child: Material(
         borderRadius: BorderRadius.circular(16),
