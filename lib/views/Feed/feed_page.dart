@@ -29,12 +29,21 @@ class FeedPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (_controller.foodieList.isNotEmpty) ...[
-                commonText("Foodies to Follow", size: 16, isBold: true),
-                SizedBox(
-                  height: 16,
-                ),
-              ],
+              Obx(
+                () {
+                  if (_controller.foodieList.isNotEmpty) {
+                    return Column(
+                      children: [
+                        commonText("Foodies to Follow", size: 16, isBold: true),
+                        SizedBox(
+                          height: 16,
+                        ),
+                      ],
+                    );
+                  }
+                  return SizedBox();
+                },
+              ),
               Obx(() {
                 return _controller.isLoading.value
                     ? Center(child: CircularProgressIndicator())
@@ -48,12 +57,15 @@ class FeedPage extends StatelessWidget {
                             final foodie = _controller.foodieList[index];
                             return InkWell(
                               onTap: () {
-                                navigateToPage(PersonDetailsPage(
-                                    id: foodie.id ??
-                                        "")); // adjust if you have ID
+                                navigateToPage(
+                                    PersonDetailsPage(id: foodie.id ?? ""),
+                                    onPop: (value) {
+                                  _controller.fetchFoodies();
+                                  _controller.fetchLogs();
+                                }); // adjust if you have ID
                               },
                               child: profileFolllowdesign(
-                                imageUrl: foodie.image ?? "",
+                                imageUrl: getFullImagePath(foodie.image ?? ""),
                                 name: foodie.fullName ?? "User",
                                 index: index,
                                 feedController: _controller,

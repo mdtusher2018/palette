@@ -27,9 +27,10 @@ Widget badgesCard({required String imageUrl, required String name}) {
         SizedBox(
           height: 8,
         ),
-        FittedBox(
-            fit: BoxFit.scaleDown,
-            child: commonText(name, size: 14, isBold: true, maxline: 1))
+        if (name.isNotEmpty)
+          FittedBox(
+              fit: BoxFit.scaleDown,
+              child: commonText(name, size: 14, isBold: true, maxline: 1))
       ],
     ),
   );
@@ -188,7 +189,9 @@ Widget buildPostCardDesign(
                 height: 150,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                  image: NetworkImage(getFullImagePath(menuImagePath)),
+                  image: NetworkImage((menuImagePath.isNotEmpty)
+                      ? getFullImagePath(menuImagePath)
+                      : "https://th.bing.com/th/id/OIP.jUfCu2A6ilKJAdybISEMgwHaHa?rs=1&pid=ImgDetMain&cb=idpwebpc2"),
                   fit: BoxFit.cover,
                 ))),
           ),

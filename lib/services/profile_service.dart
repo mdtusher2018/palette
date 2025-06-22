@@ -6,6 +6,8 @@ import 'dart:io';
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
 import 'package:palette/models/user%20models/add_new_log_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
+import 'package:palette/models/user%20models/my_feedback_model.dart';
+import 'package:palette/models/user%20models/my_log_model.dart';
 import 'package:palette/models/user%20models/top_reated_iteams_model.dart';
 import 'package:palette/models/user%20models/update_user_model.dart';
 import 'package:http/http.dart' as http;
@@ -191,5 +193,15 @@ class ProfileService {
   Future<MyProfileModel> getMyProfile() async {
     final response = await apiService.get(ApiEndpoints.myProfile);
     return MyProfileModel.fromJson(response);
+  }
+
+  Future<MyLogsResponse> getMyLogs() async {
+    final response = await apiService.get(ApiEndpoints.myLogs);
+    return MyLogsResponse.fromJson(response);
+  }
+
+  Future<MyFeedbackModel> getMyFeedback() async {
+    final response = await apiService.get(ApiEndpoints.myFeedBack);
+    return MyFeedbackModel.fromJson(response);
   }
 }

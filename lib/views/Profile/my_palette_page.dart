@@ -1,6 +1,13 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/profile%20controller/AddNewLogController.dart';
+import 'package:palette/controller/profile%20controller/my_logs_and_feedback_controller.dart';
+import 'package:palette/repositories/profile_repository.dart';
+import 'package:palette/services/api_service.dart';
+import 'package:palette/services/profile_service.dart';
+import 'package:palette/utils/helper.dart';
 import 'package:palette/views/Feed/post_details_page.dart';
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonDesigns.dart';
@@ -9,6 +16,10 @@ import 'package:palette/views/Profile/add_new_log_page.dart';
 import '../res/commonWidgets.dart';
 
 class MyPalettePage extends StatelessWidget {
+  MyLogsAndFeedbackController controller = Get.put(MyLogsAndFeedbackController(
+      ProfileRepository(ProfileService(ApiService()))));
+
+  MyPalettePage({super.key});
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -23,47 +34,56 @@ class MyPalettePage extends StatelessWidget {
               size: 20, color: AppColors.white, isBold: true),
           centerTitle: true,
         ),
-        bottomSheet: Column(
-          children: [
-            SizedBox(height: 16),
-            _buildTabBar(),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  _buildLogsTab(context),
-                  buildReviews(
-                    reviews: [
-                      {
-                        "text":
-                            "Absolutely delicious! The meat was perfectly cooked and juicy, bursting with flavor in every bite.",
-                        "rating": 5,
-                        "time": "2 Days Ago"
-                      },
-                      {
-                        "text":
-                            "The pasta was good, but it lacked a bit of salt. Overall, a decent meal!",
-                        "rating": 3,
-                        "time": "1 Day Ago"
-                      },
-                      {
-                        "text":
-                            "A delightful experience! The dessert was a highlight, rich and decadent.",
-                        "rating": 4,
-                        "time": "3 Days Ago"
-                      },
-                      {
-                        "text":
-                            "An unforgettable dining experience! Every dish was meticulously crafted.",
-                        "rating": 5,
-                        "time": "5 Hours Ago"
-                      },
-                    ],
-                  ),
-                ],
+        bottomSheet: Obx(() {
+          return Column(
+            children: [
+              SizedBox(height: 16),
+              _buildTabBar(),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    _buildLogsTab(context, controller),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: buildReviews(
+                        reviews: controller.feedback.isNotEmpty
+                            ? List.generate(controller.feedback.length,
+                                (index) {
+                                return {
+                                  "text": controller.feedback[index].comment,
+                                  "rating": controller.feedback[index].rating,
+                                  "time": controller.feedback[index].createdAt,
+                                  'profileImage': getFullImagePath(
+                                      controller.feedback[index].reviewerImage),
+                                  'name':
+                                      controller.feedback[index].reviewerName,
+                                  'commentImage':
+                                      (controller.feedback[index].image !=
+                                                  null &&
+                                              controller.feedback[index].image!
+                                                  .isNotEmpty)
+                                          ? getFullImagePath(controller
+                                              .feedback[index].image
+                                              .toString())
+                                          : "",
+                                  'video': (controller.feedback[index].video !=
+                                              null &&
+                                          controller.feedback[index].video!
+                                              .isNotEmpty)
+                                      ? controller.feedback[index].video!
+                                          .toString()
+                                      : ""
+                                };
+                              })
+                            : [],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -101,10 +121,13 @@ class MyPalettePage extends StatelessWidget {
     );
   }
 
-  Widget _buildLogsTab(BuildContext context) {
+  Widget _buildLogsTab(
+      BuildContext context, MyLogsAndFeedbackController controller) {
     return Column(
       children: [
-        Expanded(child: buildLogs()),
+        (controller.logs.isNotEmpty)
+            ? Expanded(child: buildLogs(controller))
+            : commonText("text"),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(
@@ -138,23 +161,27 @@ class MyPalettePage extends StatelessWidget {
     );
   }
 
-  Widget buildLogs() {
+  Widget buildLogs(MyLogsAndFeedbackController controller) {
     return ListView.builder(
+      shrinkWrap: true,
       padding: EdgeInsets.all(16),
-      itemCount: 3,
+      itemCount: controller.logs.length,
       itemBuilder: (context, index) {
         return InkWell(
             onTap: () {
               // Navigate to Log Details Page
               navigateToPage(PostDetailsPage(
-                id: "",
+                id: controller.logs[index].id,
               ));
             },
             child: buildLogsCardDesign(
-                iteamName: "iteamName",
-                image: "image",
-                restaurent: "restaurent",
-                ratting: "ratting"));
+                iteamName: controller.logs[index].itemName.toString(),
+                image: (controller.logs[index].image != null &&
+                        controller.logs[index].image!.isNotEmpty)
+                    ? getFullImagePath(controller.logs[index].image!)
+                    : "https://th.bing.com/th/id/OIP.jUfCu2A6ilKJAdybISEMgwHaHa?rs=1&pid=ImgDetMain&cb=idpwebpc2",
+                restaurent: controller.logs[index].restaurent,
+                ratting: controller.logs[index].rating.toString()));
       },
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/personal_details_controller.dart';
 import 'package:palette/utils/helper.dart';
+import 'package:palette/views/Feed/post_details_page.dart';
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonDesigns.dart';
 import 'package:palette/views/res/commonWidgets.dart';
@@ -63,9 +64,12 @@ class PersonDetailsPage extends StatelessWidget {
                         size: 16, isBold: true, textAlign: TextAlign.center),
                     const SizedBox(height: 4),
                     commonSmallButton(
-                      text: "Follow",
+                      text: (controller.isFollow.value) ? "Unfollow" : "Follow",
                       verticalPadding: 10,
                       color: AppColors.primary,
+                      ontap: () {
+                        controller.followUnfollow(id: id);
+                      },
                       haveIcon: true,
                       width: 120,
                       fontSize: 16,
@@ -120,13 +124,13 @@ class PersonDetailsPage extends StatelessWidget {
                       height: 100,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
-                        itemCount: data.badgeImage.length,
+                        itemCount: data.badges.length,
                         separatorBuilder: (_, __) => const SizedBox(width: 12),
                         itemBuilder: (context, index) {
                           return badgesCard(
                             imageUrl:
-                                getFullImagePath("/" + data.badgeImage[index]),
-                            name: "Badge ${index + 1}",
+                                getFullImagePath(data.badges[index].image),
+                            name: data.badges[index].title,
                           );
                         },
                       ),
@@ -162,7 +166,7 @@ class PersonDetailsPage extends StatelessWidget {
                         final log = data.logs[index];
                         return InkWell(
                           onTap: () {
-                            // navigateToPage(PostDetailsPage(id: log.id));
+                            navigateToPage(PostDetailsPage(id: log.id));
                           },
                           child: buildPostCardDesign(
                             profileImage: data.image,

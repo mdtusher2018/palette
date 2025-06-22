@@ -44,7 +44,8 @@ class SubmitFeedbackController extends GetxController {
   }
 
   // Submission logic
-  Future<void> submitReview({required String menuId}) async {
+  Future<void> submitReview(
+      {required String menuId, required String restaurantId}) async {
     final comment = reviewController.text.trim();
     if (comment.isEmpty || rating.value == 0) {
       Get.snackbar("Error", "Please provide a comment and rating.");
@@ -55,6 +56,7 @@ class SubmitFeedbackController extends GetxController {
       isLoading.value = true;
       final response = await _repo.submitFoodFeedback(
         menuId: menuId,
+        restaurantId: restaurantId,
         comment: comment,
         rating: rating.value.toInt(),
         image: mediaType.value == 'image' ? selectedMedia.value : null,

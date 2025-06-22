@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
 import 'package:palette/models/user%20models/add_new_log_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
+import 'package:palette/models/user%20models/my_feedback_model.dart';
+import 'package:palette/models/user%20models/my_log_model.dart';
 import 'package:palette/models/user%20models/top_reated_iteams_model.dart';
 import 'package:palette/models/user%20models/update_user_model.dart';
 import 'package:palette/models/user%20models/user_profile.dart';
@@ -63,5 +65,13 @@ class ProfileRepository {
 
   Future<MyProfileModel> fetchMyProfile() {
     return userService.getMyProfile();
+  }
+
+  Future<MyLogsResponse> fetchMyLogs() {
+    return userService.getMyLogs();
+  }
+
+  Future<MyFeedbackModel> fetchMyFeedBack() {
+    return userService.getMyFeedback();
   }
 }

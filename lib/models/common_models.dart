@@ -274,19 +274,19 @@ class LogUser {
   }
 }
 
-class LogItem {
-  final String id;
-  final String name;
+class Badge {
+  final String image;
+  final String title;
 
-  LogItem({
-    required this.id,
-    required this.name,
+  Badge({
+    required this.image,
+    required this.title,
   });
 
-  factory LogItem.fromJson(Map<String, dynamic> json) {
-    return LogItem(
-      id: json['_id'] ?? '',
-      name: json['name'] ?? '',
+  factory Badge.fromJson(Map<String, dynamic> json) {
+    return Badge(
+      image: json['image'] ?? '',
+      title: json['title'] ?? '',
     );
   }
 }

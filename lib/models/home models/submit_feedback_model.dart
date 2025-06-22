@@ -16,6 +16,7 @@ class FeedbackData {
   final String id;
   final String sender;
   final String menu;
+  final String restaurant;
   final String comment;
   final int rating;
   final String createdAt;
@@ -24,6 +25,7 @@ class FeedbackData {
     required this.id,
     required this.sender,
     required this.menu,
+    required this.restaurant,
     required this.comment,
     required this.rating,
     required this.createdAt,
@@ -33,7 +35,8 @@ class FeedbackData {
     return FeedbackData(
       id: json['_id'],
       sender: json['sender'],
-      menu: json['menu'],
+      menu: json['menu'] ?? "",
+      restaurant: json['restaurant'] ?? "",
       comment: json['comment'],
       rating: json['rating'],
       createdAt: json['createdAt'],

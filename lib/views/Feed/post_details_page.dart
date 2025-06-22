@@ -33,21 +33,22 @@ class PostDetailsPage extends StatelessWidget {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (controller.logEntry.value!.image != null &&
-                  controller.logEntry.value!.image!.isNotEmpty)
-                Container(
-                  constraints: BoxConstraints(
-                      minHeight: 350,
-                      maxHeight: MediaQuery.sizeOf(context).width * 0.9),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                        image: NetworkImage(getFullImagePath(
-                            controller.logEntry.value!.image ?? "|")),
-                        fit: BoxFit.cover),
-                  ),
+              Container(
+                constraints: BoxConstraints(
+                    minHeight: 350,
+                    maxHeight: MediaQuery.sizeOf(context).width * 0.9),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  image: DecorationImage(
+                      image: NetworkImage((controller.logEntry.value!.image !=
+                                  null &&
+                              controller.logEntry.value!.image!.isNotEmpty)
+                          ? getFullImagePath(controller.logEntry.value!.image!)
+                          : "https://th.bing.com/th/id/OIP.jUfCu2A6ilKJAdybISEMgwHaHa?rs=1&pid=ImgDetMain&cb=idpwebpc2"),
+                      fit: BoxFit.cover),
                 ),
+              ),
               SizedBox(
                 height: 16,
               ),

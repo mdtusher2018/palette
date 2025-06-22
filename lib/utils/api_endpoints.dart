@@ -22,6 +22,10 @@ class ApiEndpoints {
   static const String userChallenge = "userChallenge/userCurrent-challenge";
   static const String addNewLog = "logs/add-log";
   static const String myProfile = "users/myprofile";
+  static const String myfollower = "users/all-followers";
+  static const String myfollowing = "users/all-following";
+  static const String myLogs = "logs/my-logs";
+  static const String myFeedBack = "feedback/my-feedback";
 
   // static const String deleteOwnAccount = 'users/delete-own-account';
 
@@ -30,7 +34,9 @@ class ApiEndpoints {
   static const String forYou = 'menu-management/manu-for-you';
   static const String ads = 'ads/allActive-ads';
   static String getMenuDetails(String id) => 'menu-management/get-menu/$id';
-  static const String submitFeedback = 'feedback/add-menu-feedback';
+  static const String submitMenuFeedback = 'feedback/add-menu-feedback';
+  static const String submitRestaurantFeedback =
+      'feedback/add-restaurent-feedback';
   static const String userStatus = 'users/my-stats';
   static const String checkIn = 'checkIn';
   static const String getMyFolder = 'folder/all';
@@ -41,6 +47,8 @@ class ApiEndpoints {
   static String getGarallyByRestaurantId(String id) =>
       'gallery/galleryById/$id';
   static String getFeedbackRestaurantId(String id) => 'feedback/restaurant/$id';
+  //Notification
+  static const String notification = "notifications/my-notifications";
 
   //explore
   static const String exploreList = 'explore/list';

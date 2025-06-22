@@ -10,6 +10,7 @@ import 'package:palette/models/home%20models/hightlight_model.dart';
 import 'package:palette/models/home%20models/menu_by_restaurent_id_model.dart';
 import 'package:palette/models/home%20models/menu_details_model.dart';
 import 'package:palette/models/home%20models/my_folders_model.dart';
+import 'package:palette/models/home%20models/notification_model.dart';
 import 'package:palette/models/home%20models/personal_status_model.dart';
 import 'package:palette/models/home%20models/restaurant_details_model.dart';
 import 'package:palette/services/home%20services/home_service.dart';
@@ -37,18 +38,29 @@ class HomeRepository {
 
   Future<FeedbackResponse> submitFoodFeedback({
     required String menuId,
+    required String restaurantId,
     required String comment,
     required int rating,
     File? image,
     File? video,
   }) {
-    return _homeService.submitFoodFeedback(
-      menuId: menuId,
-      comment: comment,
-      rating: rating,
-      image: image,
-      video: video,
-    );
+    if (menuId.isNotEmpty) {
+      return _homeService.submitFoodFeedback(
+        menuId: menuId,
+        comment: comment,
+        rating: rating,
+        image: image,
+        video: video,
+      );
+    } else {
+      return _homeService.submitRestaurantFeedback(
+        restaurantId: restaurantId,
+        comment: comment,
+        rating: rating,
+        image: image,
+        video: video,
+      );
+    }
   }
 
   Future<UserStatusResponse> getUserStatus() async {
@@ -93,5 +105,9 @@ class HomeRepository {
       restaurantId: restaurantId,
       folderId: folderId,
     );
+  }
+
+  Future<NotificationModel> getNotifications() {
+    return _homeService.fetctNotification();
   }
 }

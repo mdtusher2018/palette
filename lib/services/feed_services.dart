@@ -34,13 +34,15 @@ class FeedService {
     return SingleLogModel.fromJson(json);
   }
 
-  Future<AllFollowersModel> fetchFollowers(String id) async {
-    final json = await _apiService.get(ApiEndpoints.getAllFollowers(id));
-    return AllFollowersModel.fromJson(json);
+  Future<AllFollowerModel> fetchFollowers(String id, bool myinfo) async {
+    final json = await _apiService.get(
+        (myinfo) ? ApiEndpoints.myfollower : ApiEndpoints.getAllFollowers(id));
+    return AllFollowerModel.fromJson(json);
   }
 
-  Future<AllFollowingModel> fetchFollowing(String id) async {
-    final json = await _apiService.get(ApiEndpoints.getAllFollowing(id));
+  Future<AllFollowingModel> fetchFollowing(String id, bool myinfo) async {
+    final json = await _apiService.get(
+        (myinfo) ? ApiEndpoints.myfollowing : ApiEndpoints.getAllFollowing(id));
     return AllFollowingModel.fromJson(json);
   }
 

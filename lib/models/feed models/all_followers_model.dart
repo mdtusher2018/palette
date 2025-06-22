@@ -1,60 +1,48 @@
-class AllFollowersModel {
+class AllFollowerModel {
   final String status;
   final int statusCode;
   final String message;
-  final FollowersData data;
+  final List<FollowerUser> attributes;
 
-  AllFollowersModel({
+  AllFollowerModel({
     required this.status,
     required this.statusCode,
     required this.message,
-    required this.data,
+    required this.attributes,
   });
 
-  factory AllFollowersModel.fromJson(Map<String, dynamic> json) {
-    return AllFollowersModel(
+  factory AllFollowerModel.fromJson(Map<String, dynamic> json) {
+    return AllFollowerModel(
       status: json['status'] ?? '',
       statusCode: json['statusCode'] ?? 0,
       message: json['message'] ?? '',
-      data: FollowersData.fromJson(json['data'] ?? {}),
-    );
-  }
-}
-
-class FollowersData {
-  final List<FollowerAttributes> attributes;
-
-  FollowersData({required this.attributes});
-
-  factory FollowersData.fromJson(Map<String, dynamic> json) {
-    return FollowersData(
-      attributes: (json['attributes'] as List<dynamic>?)
-              ?.map((e) => FollowerAttributes.fromJson(e))
+      attributes: (json['data']?['attributes'] as List<dynamic>?)
+              ?.map((e) => FollowerUser.fromJson(e))
               .toList() ??
           [],
     );
   }
 }
 
-class FollowerAttributes {
+class FollowerUser {
   final String id;
   final String fullName;
   final String image;
-  bool isFollowing;
+  bool isFollower;
 
-  FollowerAttributes({
+  FollowerUser({
     required this.id,
     required this.fullName,
     required this.image,
-    required this.isFollowing,
+    this.isFollower = true,
   });
 
-  factory FollowerAttributes.fromJson(Map<String, dynamic> json) {
-    return FollowerAttributes(
+  factory FollowerUser.fromJson(Map<String, dynamic> json) {
+    return FollowerUser(
       id: json['_id'] ?? '',
       fullName: json['fullName'] ?? '',
       image: json['image'] ?? '',
-      isFollowing: json['isFollowing'] ?? false,
+      isFollower: true,
     );
   }
 }

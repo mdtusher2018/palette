@@ -5,8 +5,9 @@ import 'package:palette/repositories/feed_repository.dart';
 class AllFollowingController extends GetxController {
   final FeedRepository _feedRepository = FeedRepository();
   String id;
-  AllFollowingController(this.id);
-  RxList<FollowingAttributes> following = <FollowingAttributes>[].obs;
+  bool myinfo;
+  AllFollowingController(this.id, this.myinfo);
+  RxList<FollowingUser> following = <FollowingUser>[].obs;
   RxBool isLoading = false.obs;
 
   @override
@@ -18,9 +19,10 @@ class AllFollowingController extends GetxController {
   Future<void> fetchAllFollowing() async {
     try {
       isLoading.value = true;
-      final result =
-          await _feedRepository.getFollowing(id); // ensure method exists
-      following.value = result.data.attributes;
+      final result = await _feedRepository.getFollowing(
+          id, myinfo); // ensure method exists
+      following.value = result.attributes;
+      following.refresh();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch following');
     } finally {

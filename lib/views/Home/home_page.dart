@@ -14,8 +14,6 @@ import 'package:palette/views/Home/food_details_page.dart';
 import 'package:palette/views/Notification/notifications_page.dart';
 
 class HomePage extends StatelessWidget {
-  final controller = TextEditingController(); // If needed for search
-
   final HomeController homeController = Get.put(HomeController());
   UserAttributes userInfo;
   HomePage({super.key, required this.userInfo});
@@ -50,7 +48,10 @@ class HomePage extends StatelessWidget {
             },
             child: CircleAvatar(
               backgroundColor: AppColors.white,
-              child: Image.asset(AppAssetsPath.notifications),
+              child: Icon(
+                Icons.notifications_active,
+                color: AppColors.primary,
+              ),
             ),
           ),
           SizedBox(

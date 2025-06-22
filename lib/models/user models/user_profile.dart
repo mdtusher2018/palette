@@ -1,5 +1,6 @@
 // model/my_profile_model.dart
 
+import 'package:palette/models/common_models.dart';
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
 
 class MyProfileModel {
@@ -50,7 +51,7 @@ class MyProfileAttributes {
   String image;
   int followers;
   int following;
-  List<String> badgeImage;
+  List<Badge> badges; // <-- updated
   List<SingleChallenge> topChallenges;
 
   MyProfileAttributes({
@@ -59,7 +60,7 @@ class MyProfileAttributes {
     required this.image,
     required this.followers,
     required this.following,
-    required this.badgeImage,
+    required this.badges, // <-- updated
     required this.topChallenges,
   });
 
@@ -70,7 +71,9 @@ class MyProfileAttributes {
       image: json['image'],
       followers: json['followers'],
       following: json['following'],
-      badgeImage: List<String>.from(json['badgeImage'] ?? []),
+      badges:
+          (json['badges'] as List?)?.map((e) => Badge.fromJson(e)).toList() ??
+              [],
       topChallenges: List<SingleChallenge>.from(
         json['topChallenges'].map((x) => SingleChallenge.fromJson(x)),
       ),

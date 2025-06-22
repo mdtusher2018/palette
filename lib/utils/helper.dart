@@ -11,7 +11,7 @@ String getFullImagePath(String imagePath) {
   if (imagePath.startsWith('/')) {
     return '${ApiEndpoints.imageUrl}$imagePath';
   }
-  return '${ApiEndpoints.imageUrl}//$imagePath';
+  return '${ApiEndpoints.imageUrl}/$imagePath';
 }
 
 String getMimeSubtype(String path) {

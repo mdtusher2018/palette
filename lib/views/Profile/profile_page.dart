@@ -35,15 +35,16 @@ class ProfilePage extends StatelessWidget {
         title: commonText("Profile",
             size: 21, isBold: true, color: AppColors.white),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Obx(() {
-          if (controller.profile.value == null) {
-            return CircularProgressIndicator();
-          }
-          return SizedBox(
-            height: double.infinity,
-            child: SingleChildScrollView(
+      bottomSheet: SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Obx(() {
+            if (controller.profile.value == null) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -98,9 +99,13 @@ class ProfilePage extends StatelessWidget {
                       InkWell(
                           onTap: () {
                             // Navigate to Followers Page
-                            navigateToPage(FollowersPage(
-                              id: controller.profile.value!.id,
-                            ));
+                            navigateToPage(
+                                FollowersPage(
+                                  id: controller.profile.value!.id,
+                                  myinfo: true,
+                                ), onPop: (value) {
+                              controller.fetchUserFullProfile();
+                            });
                           },
                           child: profileStat(
                               controller.profile.value!.followers.toString(),
@@ -117,9 +122,12 @@ class ProfilePage extends StatelessWidget {
                       ),
                       InkWell(
                           onTap: () {
-                            navigateToPage(FollowingPage(
-                              id: controller.profile.value!.id,
-                            ));
+                            navigateToPage(
+                                FollowingPage(
+                                    id: controller.profile.value!.id,
+                                    myinfo: true), onPop: (value) {
+                              controller.fetchUserFullProfile();
+                            });
                           },
                           child: profileStat(
                               controller.profile.value!.following.toString(),
@@ -142,14 +150,14 @@ class ProfilePage extends StatelessWidget {
                     height: 100,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      itemCount: controller.profile.value!.badgeImage.length,
+                      itemCount: controller.profile.value!.badges.length,
                       separatorBuilder: (_, __) => SizedBox(width: 12),
                       itemBuilder: (context, index) {
                         return badgesCard(
-                          imageUrl: getFullImagePath(
-                              controller.profile.value!.badgeImage[index]),
-                          name: "",
-                        );
+                            imageUrl: getFullImagePath(
+                                controller.profile.value!.badges[index].image),
+                            name:
+                                controller.profile.value!.badges[index].title);
                       },
                     ),
                   ),
@@ -187,7 +195,9 @@ class ProfilePage extends StatelessWidget {
                     "Top Rated Items",
                     ontap: () {
                       // Navigate to Top Rated Items Page
-                      navigateToPage(TopRatedItemsPage());
+                      navigateToPage(TopRatedItemsPage(), onPop: (value) {
+                        controller.fetchUserFullProfile();
+                      });
                     },
                   ),
                   menuItem(
@@ -199,9 +209,9 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'package:palette/models/common_models.dart';
+
 class PersonalDetailsModel {
   final String status;
   final int statusCode;
@@ -53,7 +55,7 @@ class PersonalUserAttributes {
   final int favourites;
   final String mostVisited;
   final int logThisWeek;
-  final List<String> badgeImage;
+  List<Badge> badges; // <-- updated
 
   PersonalUserAttributes({
     required this.id,
@@ -68,7 +70,7 @@ class PersonalUserAttributes {
     required this.favourites,
     required this.mostVisited,
     required this.logThisWeek,
-    required this.badgeImage,
+    required this.badges, // <-- updated
   });
 
   factory PersonalUserAttributes.fromJson(Map<String, dynamic> json) {
@@ -87,9 +89,9 @@ class PersonalUserAttributes {
       favourites: json['favourites'] ?? 0,
       mostVisited: json['mostVisited'] ?? '',
       logThisWeek: json['logThisWeek'] ?? 0,
-      badgeImage: (json['badgeImage'] as List<dynamic>? ?? [])
-          .map((e) => e.toString())
-          .toList(),
+      badges:
+          (json['badges'] as List?)?.map((e) => Badge.fromJson(e)).toList() ??
+              [],
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:palette/models/common_models.dart';
 import 'package:palette/models/feed%20models/personal_details_model.dart';
 import 'package:palette/repositories/feed_repository.dart';
 
@@ -11,7 +12,8 @@ class PersonDetailsController extends GetxController {
   var isLoading = true.obs;
   var userDetails = Rxn<PersonalUserAttributes>();
   var logs = <PrivateLogEntry>[].obs;
-  var badgeImages = <String>[].obs;
+  var badge = <Badge>[].obs;
+  RxBool isFollow = false.obs;
 
   @override
   void onInit() {
@@ -25,11 +27,22 @@ class PersonDetailsController extends GetxController {
       final data = await feedRepository.getPersonalDetails(userId);
       userDetails.value = data.data.attributes.first;
       logs.value = data.data.attributes.first.logs;
-      badgeImages.value = data.data.attributes.first.badgeImage;
+      badge.value = data.data.attributes.first.badges;
     } catch (e) {
-      print("Error fetching details: $e");
+      Get.snackbar("Error", e.toString());
     } finally {
       isLoading(false);
+    }
+  }
+
+  Future<void> followUnfollow({required String id}) async {
+    try {
+      final result = await feedRepository.followUnfollow(id);
+      if (result.statusCode == 200) {
+        isFollow.value = !isFollow.value;
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
     }
   }
 }

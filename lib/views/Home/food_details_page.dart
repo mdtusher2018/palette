@@ -312,8 +312,9 @@ class FoodDetailsPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: commonButton("Give Review", onTap: () {
                   navigateToPage(
-                      GiveFoodReviewPage(
-                        menuId: controller.id,
+                      GiveReviewPage(
+                        id: controller.id,
+                        isMenu: true,
                       ), onPop: (value) {
                     controller.fetchMenu(id);
                   });

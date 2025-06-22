@@ -10,6 +10,7 @@ import 'package:palette/models/home%20models/hightlight_model.dart';
 import 'package:palette/models/home%20models/menu_by_restaurent_id_model.dart';
 import 'package:palette/models/home%20models/menu_details_model.dart';
 import 'package:palette/models/home%20models/my_folders_model.dart';
+import 'package:palette/models/home%20models/notification_model.dart';
 import 'package:palette/models/home%20models/personal_status_model.dart';
 import 'package:palette/models/home%20models/restaurant_details_model.dart';
 import 'package:palette/models/home%20models/submit_feedback_model.dart';
@@ -48,9 +49,29 @@ class HomeService {
     File? video,
   }) async {
     final response = await apiService.postMultipart(
-      url: ApiEndpoints.submitFeedback,
+      url: ApiEndpoints.submitMenuFeedback,
       fields: {
         'menu': menuId,
+        'comment': comment,
+        'rating': rating.toString(),
+      },
+      imageFile: image,
+      videoFile: video,
+    );
+    return FeedbackResponse.fromJson(response);
+  }
+
+  Future<FeedbackResponse> submitRestaurantFeedback({
+    required String restaurantId,
+    required String comment,
+    required int rating,
+    File? image,
+    File? video,
+  }) async {
+    final response = await apiService.postMultipart(
+      url: ApiEndpoints.submitRestaurantFeedback,
+      fields: {
+        'restaurant': restaurantId,
         'comment': comment,
         'rating': rating.toString(),
       },
@@ -124,5 +145,10 @@ class HomeService {
     });
 
     return AddFavouriteResponse.fromJson(response);
+  }
+
+  Future<NotificationModel> fetctNotification() async {
+    final jsonResponse = await apiService.get(ApiEndpoints.notification);
+    return NotificationModel.fromJson(jsonResponse);
   }
 }

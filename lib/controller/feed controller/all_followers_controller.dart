@@ -7,8 +7,9 @@ import 'package:palette/repositories/feed_repository.dart';
 class AllFollowersController extends GetxController {
   final FeedRepository _feedRepository = FeedRepository();
   String id;
-  AllFollowersController(this.id);
-  RxList<FollowerAttributes> followers = <FollowerAttributes>[].obs;
+  bool myinfo;
+  AllFollowersController(this.id, this.myinfo);
+  RxList<FollowerUser> followers = <FollowerUser>[].obs;
   RxBool isLoading = false.obs;
 
   @override
@@ -20,9 +21,10 @@ class AllFollowersController extends GetxController {
   Future<void> fetchAllFollowers() async {
     try {
       isLoading.value = true;
-      final result = await _feedRepository
-          .getFollowers(id); // make sure this method exists
-      followers.value = result.data.attributes;
+      final result = await _feedRepository.getFollowers(
+          id, myinfo); // make sure this method exists
+      followers.value = result.attributes;
+      followers.refresh();
     } catch (e) {
       log(e.toString());
       Get.snackbar('Error', 'Failed to fetch followers');
@@ -35,12 +37,12 @@ class AllFollowersController extends GetxController {
     try {
       final result = await _feedRepository.followUnfollow(followers[index].id);
       if (result.statusCode == 200) {
-        followers[index].isFollowing = !followers[index].isFollowing;
+        followers[index].isFollower = !followers[index].isFollower;
         followers.refresh();
       }
     } catch (e) {
       Get.snackbar('Error',
-          'Failed to ${followers[index].isFollowing ? "unfollow" : "follow"}');
+          'Failed to ${followers[index].isFollower ? "unfollow" : "follow"}');
     }
   }
 }

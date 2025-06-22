@@ -1,3 +1,7 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/feed%20controller/all_followers_controller.dart';
@@ -6,14 +10,15 @@ import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 
 class FollowersPage extends StatelessWidget {
-  const FollowersPage({super.key, required this.id});
+  FollowersPage({super.key, required this.id, this.myinfo = false});
 
   final String id;
+  bool myinfo;
 
   @override
   Widget build(BuildContext context) {
     final AllFollowersController _controller =
-        Get.put(AllFollowersController(id)); // Inject the controller
+        Get.put(AllFollowersController(id, myinfo)); // Inject the controller
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
@@ -59,6 +64,7 @@ class FollowersPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   itemCount: _controller.followers.length,
                   itemBuilder: (context, index) {
+                    log(_controller.followers.length.toString());
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Row(
@@ -88,7 +94,7 @@ class FollowersPage extends StatelessWidget {
                           ),
                           Obx(() {
                             return commonSmallButton(
-                              text: _controller.followers[index].isFollowing
+                              text: _controller.followers[index].isFollower
                                   ? 'Unfollow'
                                   : 'Follow',
                               ontap: () {

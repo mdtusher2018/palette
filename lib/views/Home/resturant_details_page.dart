@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:palette/controller/home%20page%20controller/restaurant_details_controller.dart';
 import 'package:palette/models/common_models.dart';
 import 'package:palette/utils/helper.dart';
+import 'package:palette/views/Home/give_food_review_page.dart';
 import 'package:palette/views/Home/resturant_reviews_page.dart';
 import 'package:palette/views/res/image_path.dart';
 import 'package:palette/views/res/colors.dart';
@@ -217,6 +218,24 @@ class RestaurantDetailsPage extends StatelessWidget {
                                     .toList()),
                             Column(
                               children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        navigateToPage(RestautentReviewsPage(
+                                          restaurantId: id,
+                                        ));
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8.0),
+                                        child: commonText("See all",
+                                            size: 16, color: AppColors.primary),
+                                      ),
+                                    )
+                                  ],
+                                ),
                                 buildReviews(
                                     reviews: controller.restaurantDetails.value!
                                             .feedbacks.isNotEmpty
@@ -300,11 +319,15 @@ class RestaurantDetailsPage extends StatelessWidget {
                                         : [],
                                     physics: NeverScrollableScrollPhysics(),
                                     shrinkWrap: true),
-                                commonButton("View all reviews", onTap: () {
-                                  navigateToPage(RestautentReviewsPage(
-                                    restaurantId: id,
-                                  ));
-                                }, height: 40, width: 150, borderRadious: 8),
+                                commonButton("Give Review", onTap: () {
+                                  navigateToPage(
+                                      GiveReviewPage(
+                                        id: controller.id,
+                                        isMenu: false,
+                                      ), onPop: (value) {
+                                    controller.fetchRestaurantDetails(id);
+                                  });
+                                }, borderRadious: 8),
                                 SizedBox(height: 16),
                               ],
                             ),

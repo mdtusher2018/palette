@@ -1,3 +1,7 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/feed%20controller/all_following_controller.dart';
@@ -6,13 +10,14 @@ import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 
 class FollowingPage extends StatelessWidget {
-  FollowingPage({super.key, required this.id});
+  FollowingPage({super.key, required this.id, this.myinfo = false});
   final String id;
+  bool myinfo;
 
   @override
   Widget build(BuildContext context) {
     final AllFollowingController _controller =
-        Get.put(AllFollowingController(id));
+        Get.put(AllFollowingController(id, myinfo));
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
@@ -58,7 +63,8 @@ class FollowingPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   itemCount: _controller.following.length,
                   itemBuilder: (context, index) {
-                    final user = _controller.following[index];
+                    log(_controller.following.length.toString());
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Row(
@@ -66,7 +72,8 @@ class FollowingPage extends StatelessWidget {
                           CircleAvatar(
                             radius: 24,
                             backgroundImage: NetworkImage(
-                              getFullImagePath(user.image),
+                              getFullImagePath(
+                                  _controller.following[index].image),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -74,18 +81,22 @@ class FollowingPage extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                commonText(user.fullName,
-                                    size: 14, isBold: true),
+                                commonText(
+                                    _controller.following[index].fullName,
+                                    size: 14,
+                                    isBold: true),
                                 const SizedBox(height: 4),
                                 commonText(
-                                  '@${user.fullName.toLowerCase().replaceAll(' ', '_')}',
+                                  '@${_controller.following[index].fullName.toLowerCase().replaceAll(' ', '_')}',
                                   size: 12,
                                 ),
                               ],
                             ),
                           ),
                           commonSmallButton(
-                            text: user.isFollowing ? 'Unfollow' : 'Follow',
+                            text: _controller.following[index].isFollowing
+                                ? 'Unfollow'
+                                : 'Follow',
                             ontap: () {
                               _controller.followUnfollow(index: index);
                             },

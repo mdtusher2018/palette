@@ -365,6 +365,7 @@ Widget commonSearchBar(
     {String hintText = "Search",
     TextEditingController? controller,
     Function(String)? onSubmitted,
+    Function(String)? onChanged,
     bool noshadow = false}) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -388,6 +389,7 @@ Widget commonSearchBar(
         const SizedBox(width: 8),
         Expanded(
           child: TextField(
+            onChanged: onChanged,
             controller: controller,
             onSubmitted: onSubmitted,
             decoration: InputDecoration(

@@ -5,9 +5,10 @@ import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 import 'package:palette/views/res/video_screen.dart';
 
-class GiveFoodReviewPage extends StatelessWidget {
-  final String menuId;
-  const GiveFoodReviewPage({super.key, required this.menuId});
+class GiveReviewPage extends StatelessWidget {
+  final String id;
+  final bool isMenu;
+  const GiveReviewPage({super.key, required this.id, required this.isMenu});
 
   @override
   Widget build(BuildContext context) {
@@ -160,8 +161,9 @@ class GiveFoodReviewPage extends StatelessWidget {
                           ? const Center(child: CircularProgressIndicator())
                           : commonButton("Submit Review",
                               height: 40,
-                              onTap: () =>
-                                  controller.submitReview(menuId: menuId)),
+                              onTap: () => controller.submitReview(
+                                  menuId: (isMenu) ? id : "",
+                                  restaurantId: (isMenu) ? "" : id)),
                     ),
                   ],
                 ),

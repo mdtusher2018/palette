@@ -91,11 +91,19 @@ class ExploreScreen extends StatelessWidget {
         children: [
           commonSearchBar(
               hintText: "Search Restaurant, Dishes",
+              onChanged: (p0) {
+                if (p0.isEmpty) {
+                  controller.updateSearch(_searchController.text.trim());
+                }
+              },
               onSubmitted: (value) {
                 controller.updateSearch(_searchController.text.trim());
               },
               controller: _searchController),
           SizedBox(height: 16),
+          if (controller.topRestaurants.isEmpty && controller.topMenus.isEmpty)
+            Center(
+                child: commonText("No Result Found", isBold: true, size: 18)),
           if (controller.topRestaurants.isNotEmpty)
             commonText("Top Rated Restaurants", size: 18, isBold: true),
           SizedBox(height: 12),
