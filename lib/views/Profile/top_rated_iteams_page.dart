@@ -44,14 +44,15 @@ class TopRatedItemsPage extends StatelessWidget {
           child: ListView.separated(
             itemCount: _controller.items.length,
             separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) => itemCard(_controller.items[index]),
+            itemBuilder: (context, index) =>
+                itemCard(_controller.items[index], _controller),
           ),
         );
       }),
     );
   }
 
-  Widget itemCard(TopRatedItem item) {
+  Widget itemCard(TopRatedItem item, TopRatedItemsController controller) {
     return Material(
       borderRadius: BorderRadius.circular(12),
       elevation: 1,
@@ -100,10 +101,13 @@ class TopRatedItemsPage extends StatelessWidget {
                     color: AppColors.black,
                     fontWeight: FontWeight.w900),
                 const SizedBox(width: 12),
-                Image.asset(
-                  AppAssetsPath.pin,
-                  color: item.pinned ? Colors.red.shade700 : AppColors.gray,
-                  width: 18,
+                InkWell(
+                  onTap: () => controller.togglePinUnpin(item.id),
+                  child: Image.asset(
+                    AppAssetsPath.pin,
+                    color: item.pinned ? Colors.red.shade700 : AppColors.gray,
+                    width: 18,
+                  ),
                 ),
               ],
             ),

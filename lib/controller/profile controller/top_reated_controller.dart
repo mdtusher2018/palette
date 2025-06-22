@@ -29,4 +29,20 @@ class TopRatedItemsController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<void> togglePinUnpin(String feedbackId) async {
+    try {
+      final response = await _repository.togglePinUnpin(feedbackId);
+      if (response.statusCode == 200) {
+        Get.snackbar('Success', response.message);
+        fetchTopRatedItems();
+      } else {
+        Get.snackbar('Error', response.message);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to toggle pin status');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

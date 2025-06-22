@@ -26,6 +26,7 @@ class ApiEndpoints {
   static const String myfollowing = "users/all-following";
   static const String myLogs = "logs/my-logs";
   static const String myFeedBack = "feedback/my-feedback";
+  static String pinUnpin(String id) => "feedback/toggle/$id";
 
   // static const String deleteOwnAccount = 'users/delete-own-account';
 
@@ -47,7 +48,6 @@ class ApiEndpoints {
   static String getGarallyByRestaurantId(String id) =>
       'gallery/galleryById/$id';
   static String getFeedbackRestaurantId(String id) => 'feedback/restaurant/$id';
-  //Notification
   static const String notification = "notifications/my-notifications";
 
   //explore

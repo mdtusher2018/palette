@@ -8,6 +8,7 @@ import 'package:palette/models/user%20models/add_new_log_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
 import 'package:palette/models/user%20models/my_feedback_model.dart';
 import 'package:palette/models/user%20models/my_log_model.dart';
+import 'package:palette/models/user%20models/pin_unpin_model.dart';
 import 'package:palette/models/user%20models/top_reated_iteams_model.dart';
 import 'package:palette/models/user%20models/update_user_model.dart';
 import 'package:http/http.dart' as http;
@@ -203,5 +204,12 @@ class ProfileService {
   Future<MyFeedbackModel> getMyFeedback() async {
     final response = await apiService.get(ApiEndpoints.myFeedBack);
     return MyFeedbackModel.fromJson(response);
+  }
+
+  Future<FeedbackPinUnpinResponse> togglePinUnpinFeedback(
+      String feedbackId) async {
+    final responseJson =
+        await apiService.get(ApiEndpoints.pinUnpin(feedbackId));
+    return FeedbackPinUnpinResponse.fromJson(responseJson);
   }
 }

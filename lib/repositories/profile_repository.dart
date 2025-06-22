@@ -5,6 +5,7 @@ import 'package:palette/models/user%20models/add_new_log_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
 import 'package:palette/models/user%20models/my_feedback_model.dart';
 import 'package:palette/models/user%20models/my_log_model.dart';
+import 'package:palette/models/user%20models/pin_unpin_model.dart';
 import 'package:palette/models/user%20models/top_reated_iteams_model.dart';
 import 'package:palette/models/user%20models/update_user_model.dart';
 import 'package:palette/models/user%20models/user_profile.dart';
@@ -73,5 +74,9 @@ class ProfileRepository {
 
   Future<MyFeedbackModel> fetchMyFeedBack() {
     return userService.getMyFeedback();
+  }
+
+  Future<FeedbackPinUnpinResponse> togglePinUnpin(String feedbackId) {
+    return userService.togglePinUnpinFeedback(feedbackId);
   }
 }
