@@ -27,12 +27,14 @@ class FeedRepository {
     return await _feedService.fetchALogDetails(id);
   }
 
-  Future<AllFollowerModel> getFollowers(String id, bool myinfo) async {
-    return await _feedService.fetchFollowers(id, myinfo);
+  Future<AllFollowerModel> getFollowers(String id, bool myinfo,
+      {String? search}) async {
+    return await _feedService.fetchFollowers(id, myinfo, search: search);
   }
 
-  Future<AllFollowingModel> getFollowing(String id, bool myinfo) async {
-    return await _feedService.fetchFollowing(id, myinfo);
+  Future<AllFollowingModel> getFollowing(String id, bool myinfo,
+      {String? search}) async {
+    return await _feedService.fetchFollowing(id, myinfo, search: search);
   }
 
   Future<LogModel> getALlLogsByUserId(String id) async {

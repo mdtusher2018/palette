@@ -13,6 +13,7 @@ class FollowingPage extends StatelessWidget {
   FollowingPage({super.key, required this.id, this.myinfo = false});
   final String id;
   bool myinfo;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,17 @@ class FollowingPage extends StatelessWidget {
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: commonSearchBar(),
+              child: commonSearchBar(
+                  hintText: "Search",
+                  onChanged: (p0) {
+                    if (p0.isEmpty) {
+                      _controller.updateSearch(_searchController.text.trim());
+                    }
+                  },
+                  onSubmitted: (value) {
+                    _controller.updateSearch(_searchController.text.trim());
+                  },
+                  controller: _searchController),
             ),
             const SizedBox(height: 16),
             Expanded(

@@ -10,24 +10,36 @@ class AllFollowingController extends GetxController {
   RxList<FollowingUser> following = <FollowingUser>[].obs;
   RxBool isLoading = false.obs;
 
+  var searchQuery = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
     fetchAllFollowing();
+
+    // Reactively fetch following users on search query change
+    ever(searchQuery, (_) => fetchAllFollowing());
   }
 
   Future<void> fetchAllFollowing() async {
     try {
       isLoading.value = true;
-      final result = await _feedRepository.getFollowing(
-          id, myinfo); // ensure method exists
-      following.value = result.attributes;
-      following.refresh();
+
+      final result = await _feedRepository.getFollowing(id, myinfo,
+          search: searchQuery.value);
+
+      final allFollowing = result.attributes;
+
+      following.assignAll(allFollowing);
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch following');
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void updateSearch(String query) {
+    searchQuery.value = query.trim();
   }
 
   Future<void> followUnfollow({required int index}) async {

@@ -34,15 +34,41 @@ class FeedService {
     return SingleLogModel.fromJson(json);
   }
 
-  Future<AllFollowerModel> fetchFollowers(String id, bool myinfo) async {
-    final json = await _apiService.get(
-        (myinfo) ? ApiEndpoints.myfollower : ApiEndpoints.getAllFollowers(id));
+  // Future<AllFollowerModel> fetchFollowers(String id, bool myinfo) async {
+  //   final json = await _apiService.get(
+  //       (myinfo) ? ApiEndpoints.myfollower : ApiEndpoints.getAllFollowers(id));
+  //   return AllFollowerModel.fromJson(json);
+  // }
+
+  // Future<AllFollowingModel> fetchFollowing(String id, bool myinfo) async {
+  //   final json = await _apiService.get(
+  //       (myinfo) ? ApiEndpoints.myfollowing : ApiEndpoints.getAllFollowing(id));
+  //   return AllFollowingModel.fromJson(json);
+  // }
+
+  Future<AllFollowerModel> fetchFollowers(String id, bool myinfo,
+      {String? search}) async {
+    String url =
+        myinfo ? ApiEndpoints.myfollower : ApiEndpoints.getAllFollowers(id);
+
+    if (search != null && search.isNotEmpty) {
+      url += '?search=$search';
+    }
+
+    final json = await _apiService.get(url);
     return AllFollowerModel.fromJson(json);
   }
 
-  Future<AllFollowingModel> fetchFollowing(String id, bool myinfo) async {
-    final json = await _apiService.get(
-        (myinfo) ? ApiEndpoints.myfollowing : ApiEndpoints.getAllFollowing(id));
+  Future<AllFollowingModel> fetchFollowing(String id, bool myinfo,
+      {String? search}) async {
+    String url =
+        myinfo ? ApiEndpoints.myfollowing : ApiEndpoints.getAllFollowing(id);
+
+    if (search != null && search.isNotEmpty) {
+      url += '?search=$search';
+    }
+
+    final json = await _apiService.get(url);
     return AllFollowingModel.fromJson(json);
   }
 
