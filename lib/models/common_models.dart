@@ -32,9 +32,10 @@ class UserAttributes {
   factory UserAttributes.fromJson(Map<String, dynamic> json) {
     return UserAttributes(
       id: json['_id'] ?? '',
-      fullName: json['fullName'] ?? '',
+      fullName: json['fullName'] ?? 'N/A',
       email: json['email'] ?? '',
-      image: json['image'] ?? '',
+      image: json['image'] ??
+          'https://st4.depositphotos.com/18126772/23647/v/450/depositphotos_236478182-stock-illustration-smiling-man-green-eyes-brown.jpg',
       coverImage: json['coverImage'] ?? '',
       isComplete: json['isComplete'] ?? false,
       isBan: json['isBan'] ?? false,
@@ -42,8 +43,8 @@ class UserAttributes {
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
       v: json['__v'] ?? 0,
-      phoneNumber: json['phoneNumber'] ?? '',
-      aboutMe: json['aboutme'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? 'N/A',
+      aboutMe: json['aboutme'] ?? 'N/A',
     );
   }
 
