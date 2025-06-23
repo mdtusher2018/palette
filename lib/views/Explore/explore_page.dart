@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/explore_controller.dart';
+import 'package:palette/models/explore/MapPage.dart';
 import 'package:palette/utils/helper.dart';
 
 import 'package:palette/views/Home/food_details_page.dart';
@@ -168,14 +169,6 @@ class ExploreScreen extends StatelessWidget {
   }
 
   Widget _buildMapView() {
-    return Container(
-      color: Colors.grey.shade200,
-      child: Center(
-        child: Image.asset(
-          "assets/images/map.png",
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
+    return MapPage();
   }
 }
