@@ -92,14 +92,14 @@ class FoodMenu {
   factory FoodMenu.fromJson(Map<String, dynamic> json) {
     return FoodMenu(
       id: json['_id'] ?? '',
-      name: json['name'] ?? '',
+      name: json['name'] ?? 'N/A',
       image: json['image'],
       rating: (json['rating'] as num).toDouble(),
       createdAt: DateTime.parse(json['createdAt']),
-      restaurentName: json['restaurentName'] ?? '',
-      restaurentId: json['restaurentId'] ?? '',
-      category: json['category'] ?? '',
-      categoryId: json['categoryId'] ?? '',
+      restaurentName: json['restaurentName'] ?? 'N/A',
+      restaurentId: json['restaurentId'] ?? 'N/A',
+      category: json['category'] ?? 'N/A',
+      categoryId: json['categoryId'] ?? 'N/A',
     );
   }
 
@@ -304,7 +304,7 @@ class Badge {
   factory Badge.fromJson(Map<String, dynamic> json) {
     return Badge(
       image: json['image'] ?? '',
-      title: json['title'] ?? '',
+      title: json['title'] ?? 'N/A',
     );
   }
 }

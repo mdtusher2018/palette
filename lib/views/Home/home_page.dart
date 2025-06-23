@@ -69,8 +69,7 @@ class HomePage extends StatelessWidget {
               children: [
                 // Promo Banner
                 Obx(() {
-                  if (homeController.isLoading.value &&
-                      homeController.ads.isEmpty) {
+                  if (homeController.isLoading.value) {
                     return SizedBox(
                       height: 150,
                       child: Center(child: CircularProgressIndicator()),
