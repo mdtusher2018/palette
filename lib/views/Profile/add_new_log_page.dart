@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/profile%20controller/AddNewLogController.dart';
+import 'package:palette/models/user%20models/catagory_model.dart';
 import 'package:palette/views/res/image_path.dart';
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonWidgets.dart';
@@ -44,6 +45,44 @@ class AddNewLogPage extends GetView<AddNewLogController> {
                   controller: controller.itemController,
                   hintText: "Search Item",
                 ),
+                const SizedBox(height: 16),
+                commonText("Category", size: 14, isBold: true),
+                const SizedBox(height: 8),
+                Obx(() {
+                  return DropdownButtonFormField<FoodCategory>(
+                    value: controller.selectedCategory.value,
+                    hint: commonText("Select Food Category"),
+                    isExpanded: true,
+                    items: controller.categories.map((category) {
+                      return DropdownMenuItem<FoodCategory>(
+                        value: category,
+                        child: commonText(category.name),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      controller.selectedCategory.value = value;
+                    },
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.primary, width: 2),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.primary, width: 2),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.primary, width: 2),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                  );
+                }),
                 const SizedBox(height: 16),
                 commonText("Upload Media", isBold: true, size: 14),
                 const SizedBox(height: 8),
@@ -215,13 +254,20 @@ class AddNewLogPage extends GetView<AddNewLogController> {
                 ),
               ],
             ),
-            if (controller.isLoading.value)
-              Container(
-                color: Colors.black.withOpacity(0.4),
-                child: const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
-                ),
-              ),
+            Obx(
+              () {
+                if (controller.isLoading.value) {
+                  return SizedBox(
+                    height: MediaQuery.sizeOf(context).height,
+                    width: MediaQuery.sizeOf(context).width,
+                    child: const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                  );
+                }
+                return SizedBox();
+              },
+            )
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/views/Authuntication/select_establishment_type.dart';
+import 'package:palette/views/Authuntication/sign_in_page.dart';
 import '../res/commonWidgets.dart';
 import '../res/image_path.dart';
 
@@ -41,7 +42,12 @@ class SelectRolePage extends StatelessWidget {
                     textAlign: TextAlign.center, size: 18, isBold: true),
               ),
               const SizedBox(height: 40),
-              commonButton("Regular User"),
+              commonButton(
+                "Regular User",
+                onTap: () {
+                  Get.to(SignInPage());
+                },
+              ),
               SizedBox(height: 20),
               commonButton("Establishment Owner", onTap: () {
                 Get.to(SelectEstablishmentType());

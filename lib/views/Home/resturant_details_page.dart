@@ -14,6 +14,7 @@ import 'package:palette/views/res/commonWidgets.dart';
 import 'package:palette/views/Home/photos_page.dart';
 import 'package:palette/views/Home/food_details_page.dart';
 import 'package:palette/views/Home/menus_page.dart';
+import 'package:share_plus/share_plus.dart';
 
 class RestaurantDetailsPage extends StatelessWidget {
   RxInt _currentTabIndex = 0.obs;
@@ -162,13 +163,23 @@ class RestaurantDetailsPage extends StatelessWidget {
                         ),
                         SizedBox(width: 12),
                         Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(AppAssetsPath.share),
-                              commonText("Share", size: 14, isBold: true),
-                            ],
+                          child: InkWell(
+                            onTap: () {
+                              SharePlus.instance.share(
+                                ShareParams(
+                                  text:
+                                      'Try ${controller.restaurantDetails.value!.fullName} on the Palette App!',
+                                ),
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Image.asset(AppAssetsPath.share),
+                                commonText("Share", size: 14, isBold: true),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -395,6 +406,11 @@ class RestaurantDetailsPage extends StatelessWidget {
       {required List<RestaurantMenu> menus,
       required bool isCheckIn,
       required Function() onCheckIn}) {
+    if (menus.isEmpty) {
+      return Center(
+        child: commonText("No Menu Found", size: 14, isBold: true),
+      );
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -455,6 +471,11 @@ class RestaurantDetailsPage extends StatelessWidget {
   }
 
   Widget _buildPhotoSection({required List<String> photoPaths}) {
+    if (photoPaths.isEmpty) {
+      return Center(
+        child: commonText("No Menu Found", size: 14, isBold: true),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(

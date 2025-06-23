@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
 import 'package:palette/models/user%20models/add_new_log_model.dart';
+import 'package:palette/models/user%20models/catagory_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
 import 'package:palette/models/user%20models/my_feedback_model.dart';
 import 'package:palette/models/user%20models/my_log_model.dart';
@@ -62,6 +63,11 @@ class ProfileRepository {
       image: image,
       video: video,
     );
+  }
+
+  Future<List<FoodCategory>> getAllFoodCategories() async {
+    final response = await userService.fetchFoodCategories();
+    return response.data.attributes;
   }
 
   Future<MyProfileModel> fetchMyProfile() {

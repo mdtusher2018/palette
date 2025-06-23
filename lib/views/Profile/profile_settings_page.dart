@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/profile%20controller/user_controller.dart';
+import 'package:palette/services/local_storage_service.dart';
 import 'package:palette/utils/helper.dart';
+import 'package:palette/views/Authuntication/sign_in_page.dart';
 import 'package:palette/views/Profile/terms_and_condition_page.dart';
 import '../res/colors.dart';
 import '../res/commonWidgets.dart';
@@ -134,7 +136,11 @@ class ProfileSettingsPage extends StatelessWidget {
                       const SizedBox(height: 10),
                       InkWell(
                         onTap: () async {
-                          // TODO: Implement logout logic here
+                          // Clear all local storage data
+                          await LocalStorageService().removeToken();
+
+                          // Navigate to SignInPage and remove all previous routes
+                          Get.offAll(() => SignInPage());
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),

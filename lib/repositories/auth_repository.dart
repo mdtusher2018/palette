@@ -1,3 +1,4 @@
+import 'package:palette/models/auth%20models/GoogleSignInResponseModel.dart';
 import 'package:palette/models/auth%20models/email_verified_model.dart';
 import 'package:palette/models/auth%20models/forget_password_model.dart';
 import 'package:palette/models/auth%20models/otp_verified_model.dart';
@@ -12,6 +13,11 @@ class AuthRepository {
 
   Future<LoginResponse> signIn(String email, String password) {
     return authService.login(email, password);
+  }
+
+  Future<GoogleSignInResponseModel> googleSignin(String email,
+      {String? name, String? image}) {
+    return authService.googleSignin(email, image: image, name: name);
   }
 
   Future<SignupResponse> signUp(

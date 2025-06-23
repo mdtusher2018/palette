@@ -6,12 +6,12 @@ import 'package:palette/repositories/profile_repository.dart';
 import 'package:palette/services/api_service.dart';
 import 'package:palette/services/profile_service.dart';
 import 'package:palette/utils/helper.dart';
+import 'package:palette/views/Profile/new_favorite_page.dart';
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonDesigns.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 import 'package:palette/views/Profile/badges_page.dart';
 import 'package:palette/views/Profile/challenges_page.dart';
-import 'package:palette/views/Profile/favorites_page.dart';
 import 'package:palette/views/Feed/followers_page.dart';
 import 'package:palette/views/Feed/following_page.dart';
 import 'package:palette/views/Profile/my_palette_page.dart';
@@ -134,20 +134,24 @@ class ProfilePage extends StatelessWidget {
                               "Following")),
                     ],
                   ),
-                  SizedBox(height: 24),
+                  if (controller.profile.value!.badges.isNotEmpty)
+                    SizedBox(height: 24),
 
                   // Badges Section
-                  sectionHeader(
-                    "Badges",
-                    ontap: () {
-                      navigateToPage(BadgesPage(
-                        id: controller.profile.value!.id,
-                      ));
-                    },
-                  ),
-                  SizedBox(height: 12),
+                  if (controller.profile.value!.badges.isNotEmpty)
+                    sectionHeader(
+                      "Badges",
+                      ontap: () {
+                        navigateToPage(BadgesPage(
+                          id: controller.profile.value!.id,
+                        ));
+                      },
+                    ),
+                  if (controller.profile.value!.badges.isNotEmpty)
+                    SizedBox(height: 12),
                   SizedBox(
-                    height: 100,
+                    height:
+                        controller.profile.value!.badges.isNotEmpty ? 100 : 0,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: controller.profile.value!.badges.length,
@@ -204,7 +208,7 @@ class ProfilePage extends StatelessWidget {
                     "Favorites",
                     ontap: () {
                       // Navigate to Favorites Page
-                      navigateToPage(FavoritesPage());
+                      navigateToPage(NewFavoritePage());
                     },
                   ),
                 ],

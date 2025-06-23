@@ -91,9 +91,13 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 20),
 
                 // Highlights of the Week
-                commonText("Highlights of the Week", size: 16, isBold: true),
+                if (homeController.highlights.isNotEmpty)
+                  commonText("Highlights of the Week", size: 16, isBold: true),
                 SizedBox(height: 12),
                 Obx(() {
+                  if (homeController.highlights.isEmpty) {
+                    return SizedBox();
+                  }
                   return SizedBox(
                       height: 200,
                       child: ListView.separated(
@@ -152,7 +156,7 @@ class HomePage extends StatelessWidget {
                         "Most Visited",
                         (homeController.userStatus.value != null)
                             ? homeController.userStatus.value!.mostVisited
-                            : "Unnamed",
+                            : "N/A",
                       ),
                     ],
                   );
@@ -161,7 +165,8 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 20),
 
                 // For You
-                commonText("For You", size: 16, isBold: true),
+                if (homeController.foryou.isNotEmpty)
+                  commonText("For You", size: 16, isBold: true),
                 SizedBox(height: 12),
                 Obx(() {
                   if (homeController.isLoading.value) {
@@ -169,9 +174,7 @@ class HomePage extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  if (homeController.foryou.isEmpty) {
-                    return commonText("No Recommandation Found");
-                  }
+
                   return ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

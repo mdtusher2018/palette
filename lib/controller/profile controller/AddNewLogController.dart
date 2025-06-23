@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:palette/models/user%20models/catagory_model.dart';
 import 'package:palette/repositories/profile_repository.dart';
 import 'package:palette/services/api_service.dart';
 import 'package:palette/services/profile_service.dart';
@@ -20,11 +21,20 @@ class AddNewLogController extends GetxController {
   // Rx variables for selected media
   Rx<File?> selectedImage = Rx<File?>(null);
   Rx<File?> selectedVideo = Rx<File?>(null);
+  var categories = <FoodCategory>[].obs;
+
+  var selectedCategory = Rxn<FoodCategory>();
 
   // Rx variable for rating
   RxDouble rating = 3.0.obs;
 
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchCategories();
+  }
 
   /// Pick an image and reset video
   Future<void> pickImage() async {
@@ -72,6 +82,7 @@ class AddNewLogController extends GetxController {
       "itemName": itemController.text,
       "rating": rating.value,
       "notes": notesController.text,
+      if (selectedCategory.value != null) "item": selectedCategory.value!.id,
     };
 
     try {
@@ -92,7 +103,19 @@ class AddNewLogController extends GetxController {
     }
   }
 
-  /// Cleanup when controller is disposed
+  Future<void> fetchCategories() async {
+    try {
+      isLoading.value = true;
+
+      final result = await profileRepository.getAllFoodCategories();
+      categories.assignAll(result);
+    } catch (e) {
+      Get.snackbar("Error", "Failed to fetch logs");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   @override
   void onClose() {
     restaurantController.dispose();

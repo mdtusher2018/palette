@@ -1,3 +1,4 @@
+import 'package:palette/models/auth%20models/GoogleSignInResponseModel.dart';
 import 'package:palette/models/auth%20models/email_verified_model.dart';
 import 'package:palette/models/auth%20models/forget_password_model.dart';
 import 'package:palette/models/auth%20models/otp_verified_model.dart';
@@ -19,6 +20,14 @@ class AuthService {
 
     final jsonResponse = await apiService.post(ApiEndpoints.signIn, body);
     return LoginResponse.fromJson(jsonResponse);
+  }
+
+  Future<GoogleSignInResponseModel> googleSignin(String email,
+      {String? name, String? image}) async {
+    final body = {'email': email, 'image': image, 'name': name};
+
+    final jsonResponse = await apiService.post(ApiEndpoints.googleSignin, body);
+    return GoogleSignInResponseModel.fromJson(jsonResponse);
   }
 
   Future<SignupResponse> signUp(

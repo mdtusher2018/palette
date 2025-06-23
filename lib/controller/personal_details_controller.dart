@@ -6,14 +6,14 @@ import 'package:palette/repositories/feed_repository.dart';
 class PersonDetailsController extends GetxController {
   final String userId;
 
-  PersonDetailsController({required this.userId});
+  PersonDetailsController({required this.userId, required this.isFollow});
 
   final FeedRepository feedRepository = FeedRepository();
   var isLoading = true.obs;
   var userDetails = Rxn<PersonalUserAttributes>();
   var logs = <PrivateLogEntry>[].obs;
   var badge = <Badge>[].obs;
-  RxBool isFollow = false.obs;
+  RxBool isFollow;
 
   @override
   void onInit() {

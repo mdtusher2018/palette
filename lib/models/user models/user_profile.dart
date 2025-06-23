@@ -67,15 +67,15 @@ class MyProfileAttributes {
   factory MyProfileAttributes.fromJson(Map<String, dynamic> json) {
     return MyProfileAttributes(
       id: json['_id'],
-      fullName: json['fullName'],
-      image: json['image'],
-      followers: json['followers'],
-      following: json['following'],
+      fullName: json['fullName'] ?? "",
+      image: json['image'] ?? "",
+      followers: json['followers'] ?? 0,
+      following: json['following'] ?? 0,
       badges:
           (json['badges'] as List?)?.map((e) => Badge.fromJson(e)).toList() ??
               [],
       topChallenges: List<SingleChallenge>.from(
-        json['topChallenges'].map((x) => SingleChallenge.fromJson(x)),
+        json['topChallenges'].map((x) => SingleChallenge.fromJson(x)) ?? [],
       ),
     );
   }

@@ -43,6 +43,10 @@ class MyPalettePage extends StatelessWidget {
                 child: TabBarView(
                   children: [
                     _buildLogsTab(context, controller),
+                    if (controller.feedback.isEmpty)
+                      Center(
+                          child: commonText("No Feedback Found",
+                              isBold: true, size: 18)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: buildReviews(
@@ -123,11 +127,19 @@ class MyPalettePage extends StatelessWidget {
 
   Widget _buildLogsTab(
       BuildContext context, MyLogsAndFeedbackController controller) {
+    if (controller.isLoading.value) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Column(
       children: [
         (controller.logs.isNotEmpty)
             ? Expanded(child: buildLogs(controller))
-            : commonText("text"),
+            : Expanded(
+                child: Center(
+                    child: commonText("No Logs Found", isBold: true, size: 18)),
+              ),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(

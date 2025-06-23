@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +11,8 @@ import '../res/image_path.dart';
 import 'sign_in_page.dart';
 
 class SignUpPage extends StatelessWidget {
-  SignUpPage({super.key});
+  bool? isAdmin;
+  SignUpPage({super.key, this.isAdmin});
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController userIdController = TextEditingController();
@@ -60,9 +63,13 @@ class SignUpPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               commonTextfieldWithTitle(
-                "User Name",
+                (isAdmin != null && isAdmin == true)
+                    ? "Establishment Name"
+                    : "User Name",
                 userIdController,
-                hintText: "User Name",
+                hintText: (isAdmin != null && isAdmin == true)
+                    ? "Establishment Name"
+                    : "User Name",
                 assetIconPath: AppAssetsPath.person,
               ),
               const SizedBox(height: 16),
@@ -142,8 +149,8 @@ class SignUpPage extends StatelessWidget {
                   size: 14, color: AppColors.black, isBold: true),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: () {
-                  // TODO: Google Sign Up
+                onTap: () async {
+                  await authController.signInAndGetEmail();
                 },
                 child: Container(
                   padding: const EdgeInsets.all(12),
@@ -168,7 +175,7 @@ class SignUpPage extends StatelessWidget {
                     TextSpan(
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          navigateToPage(SignInPage());
+                          navigateToPage(SignInPage(isAdmin: isAdmin));
                         },
                       text: "Sign In",
                       style: GoogleFonts.sora(

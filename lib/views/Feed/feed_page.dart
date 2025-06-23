@@ -58,8 +58,11 @@ class FeedPage extends StatelessWidget {
                             return InkWell(
                               onTap: () {
                                 navigateToPage(
-                                    PersonDetailsPage(id: foodie.id ?? ""),
-                                    onPop: (value) {
+                                    PersonDetailsPage(
+                                      id: foodie.id ?? "",
+                                      isFollow: RxBool(_controller
+                                          .foodieList[index].isFollow),
+                                    ), onPop: (value) {
                                   _controller.fetchFoodies();
                                   _controller.fetchLogs();
                                 }); // adjust if you have ID
@@ -79,7 +82,20 @@ class FeedPage extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              commonText("Posts", size: 16, isBold: true),
+              if (_controller.logs.isNotEmpty)
+                commonText("Posts", size: 16, isBold: true),
+              Obx(() {
+                if (_controller.logs.isEmpty) {
+                  return Center(
+                      child: commonText(
+                          "Follow Some Foodies To\nSee More Posts",
+                          textAlign: TextAlign.center,
+                          size: 16,
+                          isBold: true));
+                } else {
+                  return SizedBox();
+                }
+              }),
               SizedBox(
                 height: 16,
               ),
@@ -142,7 +158,11 @@ class FeedPage extends StatelessWidget {
                 ? "Unfollow"
                 : "Follow",
             ontap: () {
-              feedController.followUnfollow(index: index);
+              feedController.followUnfollow(index: index).then(
+                (value) {
+                  _controller.fetchLogs();
+                },
+              );
             },
             borderWidth: 0,
             color: AppColors.primary,

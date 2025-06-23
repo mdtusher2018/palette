@@ -1,6 +1,8 @@
 // lib/controllers/auth_controller.dart
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:palette/models/auth%20models/GoogleSignInResponseModel.dart';
 import 'package:palette/models/auth%20models/email_verified_model.dart';
 import 'package:palette/models/auth%20models/forget_password_model.dart';
 import 'package:palette/models/auth%20models/otp_verified_model.dart';
@@ -31,7 +33,22 @@ class AuthController extends GetxController {
   var isResendOtp = false.obs;
   Timer? _timer;
 
-  Future<void> signIn(String email, String password) async {
+  Future<void> signInAndGetEmail() async {
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return; // user canceled
+
+      googleSignin(googleUser.email,
+          image: googleUser.photoUrl, name: googleUser.displayName);
+    } catch (e) {
+      print("Google Sign-In error: $e");
+      return null;
+    }
+  }
+
+  Future<void> signIn(String email, String password,
+      {required bool isRememberMeChecked}) async {
     var user = Rxn<LoginResponse>();
     try {
       isLoading.value = true;
@@ -41,6 +58,37 @@ class AuthController extends GetxController {
       isLoading.value = false;
       if (response.statusCode >= 200 && response.statusCode < 300) {
         LocalStorageService().saveToken(response.data.accessToken);
+        LocalStorageService().saveUserAttributes(response.data.attributes);
+        if (isRememberMeChecked) {
+          LocalStorageService().saveLoginToLocal(email, password);
+        }
+        navigateToPage(
+            RootPage(
+              userInfo: response.data.attributes,
+            ),
+            clearStack: true);
+      } else {
+        errorMessage.value = response.message;
+      }
+    } catch (e) {
+      isLoading.value = false;
+      errorMessage.value = e.toString();
+    }
+  }
+
+  Future<void> googleSignin(String email, {String? name, String? image}) async {
+    var user = Rxn<GoogleUserData>();
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+      final response =
+          await authRepository.googleSignin(email, image: image, name: name);
+      user.value = response.data;
+      isLoading.value = false;
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        LocalStorageService().saveToken(response.data.accessToken);
+        LocalStorageService().saveUserAttributes(response.data.attributes);
+
         navigateToPage(
             RootPage(
               userInfo: response.data.attributes,

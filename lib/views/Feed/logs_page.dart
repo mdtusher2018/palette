@@ -49,7 +49,8 @@ class LogsPage extends StatelessWidget {
                         ));
                       },
                       child: buildLogsCardDesign(
-                          image: controller.logs[index].image ?? "",
+                          image: controller.logs[index].image ??
+                              "https://th.bing.com/th/id/OIP.jUfCu2A6ilKJAdybISEMgwHaHa?rs=1&pid=ImgDetMain&cb=idpwebpc2",
                           iteamName: controller.logs[index].itemName ?? "",
                           ratting: controller.logs[index].rating.toString(),
                           restaurent: controller.logs[index].restaurent));

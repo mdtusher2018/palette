@@ -46,6 +46,24 @@ class UserAttributes {
       aboutMe: json['aboutme'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'fullName': fullName,
+      'email': email,
+      'image': image,
+      'coverImage': coverImage,
+      'isComplete': isComplete,
+      'isBan': isBan,
+      'role': role,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      '__v': v,
+      'phoneNumber': phoneNumber,
+      'aboutme': aboutMe,
+    };
+  }
 }
 
 class FoodMenu {

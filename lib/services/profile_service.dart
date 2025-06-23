@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
 import 'package:palette/models/user%20models/add_new_log_model.dart';
+import 'package:palette/models/user%20models/catagory_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
 import 'package:palette/models/user%20models/my_feedback_model.dart';
 import 'package:palette/models/user%20models/my_log_model.dart';
@@ -189,6 +190,11 @@ class ProfileService {
     } else {
       throw Exception('Failed to upload log: ${response.body}');
     }
+  }
+
+  Future<FoodCategoryModel> fetchFoodCategories() async {
+    final response = await apiService.get(ApiEndpoints.fetchCatagory);
+    return FoodCategoryModel.fromJson(response);
   }
 
   Future<MyProfileModel> getMyProfile() async {

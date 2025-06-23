@@ -34,9 +34,7 @@ class PostDetailsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                constraints: BoxConstraints(
-                    minHeight: 350,
-                    maxHeight: MediaQuery.sizeOf(context).width * 0.9),
+                height: 300,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),

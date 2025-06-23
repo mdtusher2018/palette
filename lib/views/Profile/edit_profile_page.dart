@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -34,6 +36,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       nameController.text = controller.userProfile.value!.fullName;
       phoneController.text = controller.userProfile.value!.phoneNumber;
       detailsController.text = controller.userProfile.value!.aboutMe;
+      log(detailsController.text);
     }
   }
 
@@ -150,7 +153,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             // Name Input Field
             commonTextfieldWithTitle(
               "Name",
-              hintText: "Sarah Johnson",
+              hintText: "Enter your name",
               nameController,
             ),
             SizedBox(
@@ -158,7 +161,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             commonTextfieldWithTitle(
               "Phone Number",
-              hintText: "123456789",
+              hintText: "Enter your phone number",
               phoneController,
             ),
             SizedBox(
@@ -167,7 +170,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             commonTextfieldWithTitle(
               "My Details",
               maxLine: 5,
-              hintText: "",
+              hintText: "Write about yourself...",
               detailsController,
             ),
 
@@ -184,6 +187,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     fullName: nameController.text,
                     phoneNumber: phoneController.text,
                     profileImage: controller.profileImageFile.value,
+                    details: detailsController.text,
                     coverImage: controller.coverImageFile.value);
               }
             }),

@@ -7,6 +7,7 @@ class ApiEndpoints {
   // Auth endpoints
   static const String signIn = 'auth/local';
   static const String signUp = 'auth/sign-up';
+  static const String googleSignin = 'auth/signInGoogle';
   static const String verifyEmail = 'auth/verify-email';
   static const String forgetPassword = 'auth/forget-password';
   static const String verifyOtp = 'auth/verify-otp';
@@ -27,6 +28,7 @@ class ApiEndpoints {
   static const String myLogs = "logs/my-logs";
   static const String myFeedBack = "feedback/my-feedback";
   static String pinUnpin(String id) => "feedback/toggle/$id";
+  static const String fetchCatagory = "food-categories";
 
   // static const String deleteOwnAccount = 'users/delete-own-account';
 

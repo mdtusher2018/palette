@@ -59,7 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 return Column(
                   children: [
                     Expanded(
-                      flex: 7,
+                      flex: 6,
                       child: Stack(
                         children: [
                           ClipRRect(
@@ -125,9 +125,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 30,
-                    )
                   ],
                 );
               },
@@ -135,7 +132,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           // Page Indicator
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.only(bottom: 24.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
@@ -154,9 +151,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
-          SizedBox(
-            height: 30,
-          )
         ],
       ),
     );

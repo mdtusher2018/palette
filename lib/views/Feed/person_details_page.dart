@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/personal_details_controller.dart';
@@ -13,11 +15,14 @@ import 'package:palette/views/Feed/logs_page.dart';
 
 class PersonDetailsPage extends StatelessWidget {
   final String id;
-  const PersonDetailsPage({super.key, required, required this.id});
+  RxBool isFollow;
+  PersonDetailsPage(
+      {super.key, required, required this.id, required this.isFollow});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(PersonDetailsController(userId: id));
+    final controller =
+        Get.put(PersonDetailsController(userId: id, isFollow: isFollow));
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());

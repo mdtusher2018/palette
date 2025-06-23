@@ -1,26 +1,124 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:palette/controller/auth_controller.dart';
+import 'package:palette/services/local_storage_service.dart';
 import '../res/colors.dart';
 import '../res/commonWidgets.dart';
 import '../res/image_path.dart';
 import 'forget_password_page.dart';
 import 'sign_up_page.dart';
 
-class SignInPage extends StatelessWidget {
-  SignInPage({super.key});
+class SignInPage extends StatefulWidget {
+  bool? isAdmin;
+  SignInPage({super.key, this.isAdmin});
 
-  final TextEditingController emailController =
-      TextEditingController(text: "user2@gmail.com");
-  final TextEditingController passwordController =
-      TextEditingController(text: "hello123");
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController passwordController = TextEditingController();
 
   final ValueNotifier<bool> isPasswordVisible = ValueNotifier<bool>(false);
+
   final ValueNotifier<bool> isRememberMeChecked = ValueNotifier<bool>(false);
 
   late final AuthController authController;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showSavedAccountsBottomSheet(context);
+    });
+  }
+
+  void showSavedAccountsBottomSheet(BuildContext context) async {
+    final savedLogins = await LocalStorageService().getSavedLogins();
+    if (savedLogins.isEmpty) return;
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      backgroundColor: Colors.white,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Container(
+            height: 300,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 50,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      const Icon(Icons.person, color: AppColors.primary),
+                      const SizedBox(width: 8),
+                      commonText("Select an account", size: 16, isBold: true),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  ...savedLogins.entries.map((entry) {
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: ListTile(
+                        leading: const Icon(Icons.account_circle_rounded,
+                            color: AppColors.primary, size: 30),
+                        title: commonText(entry.key, size: 14, isBold: true),
+                        subtitle: const Text("••••••••"),
+                        trailing: IconButton(
+                          icon:
+                              const Icon(Icons.delete, color: Colors.redAccent),
+                          onPressed: () async {
+                            await LocalStorageService().removeLogin(entry.key);
+                            Navigator.pop(context);
+                            showSavedAccountsBottomSheet(context); // refresh
+                          },
+                        ),
+                        onTap: () {
+                          final email = emailController.text.trim();
+                          final password = passwordController.text.trim();
+
+                          if (email.isEmpty || password.isEmpty) {
+                            commonSnackbar(
+                                context, "Please enter email and password");
+                            return;
+                          }
+
+                          authController.signIn(email, password,
+                              isRememberMeChecked: isRememberMeChecked.value);
+                        },
+                      ),
+                    );
+                  }).toList(),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +206,8 @@ class SignInPage extends StatelessWidget {
                       return;
                     }
 
-                    authController.signIn(email, password);
+                    authController.signIn(email, password,
+                        isRememberMeChecked: isRememberMeChecked.value);
                   },
                   "Sign In",
                 );
@@ -136,8 +235,8 @@ class SignInPage extends StatelessWidget {
                   size: 14, color: AppColors.black, isBold: true),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: () {
-                  // TODO: Add Google Sign In logic
+                onTap: () async {
+                  await authController.signInAndGetEmail();
                 },
                 child: Container(
                   padding: const EdgeInsets.all(12),
@@ -163,7 +262,9 @@ class SignInPage extends StatelessWidget {
                       text: "Sign up",
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          navigateToPage(SignUpPage());
+                          navigateToPage(SignUpPage(
+                            isAdmin: widget.isAdmin,
+                          ));
                         },
                       style: GoogleFonts.sora(
                         color: AppColors.primary,

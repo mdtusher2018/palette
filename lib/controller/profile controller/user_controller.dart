@@ -81,6 +81,7 @@ class UserController extends GetxController {
       final updateData = {
         'fullName': fullName,
         'phoneNumber': phoneNumber,
+        "aboutme": details,
       };
       if (details != null) {
         updateData['details'] = details;

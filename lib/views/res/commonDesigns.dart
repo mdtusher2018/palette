@@ -228,6 +228,9 @@ Widget cardDesign(
     bool isdelete = false,
     required String location}) {
   Widget badge(String label) {
+    if (label.isEmpty) {
+      return SizedBox();
+    }
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 4,
@@ -314,6 +317,12 @@ Widget buildReviews(
     {required List<Map<String, dynamic>> reviews,
     bool shrinkWrap = false,
     physics}) {
+  if (reviews.isEmpty) {
+    return Center(
+      child: commonText("No Reviews Found", size: 14, isBold: true),
+    );
+  }
+
   return ListView.builder(
     itemCount: reviews.length,
     padding: EdgeInsets.all(0),

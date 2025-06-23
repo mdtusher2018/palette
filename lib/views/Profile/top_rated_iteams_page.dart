@@ -23,13 +23,15 @@ class TopRatedItemsPage extends StatelessWidget {
             size: 21, isBold: true, color: AppColors.white),
         centerTitle: true,
       ),
-      body: Obx(() {
+      bottomSheet: Obx(() {
         if (_controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
         if (_controller.items.isEmpty) {
-          return const Center(child: Text("No top rated items found"));
+          return Center(
+              child: commonText("No top rated items found",
+                  size: 16, isBold: true));
         }
 
         return Container(
