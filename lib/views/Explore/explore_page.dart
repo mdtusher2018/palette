@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/explore_controller.dart';
-import 'package:palette/models/explore/MapPage.dart';
+import 'package:palette/views/Explore/MapPage.dart';
 import 'package:palette/utils/helper.dart';
 
 import 'package:palette/views/Home/food_details_page.dart';

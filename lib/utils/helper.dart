@@ -72,12 +72,16 @@ String _getDayName(int weekday) {
 }
 
 String _formatTime(String time24) {
-  final parts = time24.split(":");
-  final hour = int.parse(parts[0]);
-  final minute = parts.length > 1 ? int.parse(parts[1]) : 0;
+  try {
+    final parts = time24.split(":");
+    final hour = int.parse(parts[0]);
+    final minute = parts.length > 1 ? int.parse(parts[1]) : 0;
 
-  final dt = DateTime(0, 0, 0, hour, minute);
-  return TimeOfDay.fromDateTime(dt).format(Get.context!);
+    final dt = DateTime(0, 0, 0, hour, minute);
+    return TimeOfDay.fromDateTime(dt).format(Get.context!);
+  } catch (e) {
+    return time24; // fallback if parsing fails
+  }
 }
 
 String getTimeDifference(String dateString) {

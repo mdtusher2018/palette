@@ -9,11 +9,11 @@ import 'package:palette/models/home%20models/gallery_by_restaurant_id.dart';
 import 'package:palette/models/home%20models/hightlight_model.dart';
 import 'package:palette/models/home%20models/menu_by_restaurent_id_model.dart';
 import 'package:palette/models/home%20models/menu_details_model.dart';
-import 'package:palette/models/home%20models/my_folders_model.dart';
 import 'package:palette/models/home%20models/notification_model.dart';
 import 'package:palette/models/home%20models/personal_status_model.dart';
 import 'package:palette/models/home%20models/restaurant_details_model.dart';
 import 'package:palette/models/home%20models/submit_feedback_model.dart';
+import 'package:palette/models/user%20models/favorite_menu_folder_model.dart';
 import 'package:palette/services/api_service.dart';
 import 'package:palette/utils/api_endpoints.dart';
 import 'package:palette/views/Home/checkin_model.dart';
@@ -121,9 +121,10 @@ class HomeService {
     return CheckInResponse.fromJson(response);
   }
 
-  Future<FoldersResponse> fetchMyFolder() async {
-    final jsonResponse = await apiService.get(ApiEndpoints.getMyFolder);
-    return FoldersResponse.fromJson(jsonResponse);
+  Future<FavoriteMenuFoldersFetchResponse> fetchMyFolder() async {
+    final jsonResponse =
+        await apiService.get(ApiEndpoints.myFavoriteMenuFolders);
+    return FavoriteMenuFoldersFetchResponse.fromJson(jsonResponse);
   }
 
   Future<CreateFolderResponse> createFolder(String folderName) async {

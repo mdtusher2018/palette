@@ -95,16 +95,7 @@ class _SignInPageState extends State<SignInPage> {
                           },
                         ),
                         onTap: () {
-                          final email = emailController.text.trim();
-                          final password = passwordController.text.trim();
-
-                          if (email.isEmpty || password.isEmpty) {
-                            commonSnackbar(
-                                context, "Please enter email and password");
-                            return;
-                          }
-
-                          authController.signIn(email, password,
+                          authController.signIn(entry.key, entry.value,
                               isRememberMeChecked: isRememberMeChecked.value);
                         },
                       ),

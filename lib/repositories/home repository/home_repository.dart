@@ -9,10 +9,10 @@ import 'package:palette/models/home%20models/gallery_by_restaurant_id.dart';
 import 'package:palette/models/home%20models/hightlight_model.dart';
 import 'package:palette/models/home%20models/menu_by_restaurent_id_model.dart';
 import 'package:palette/models/home%20models/menu_details_model.dart';
-import 'package:palette/models/home%20models/my_folders_model.dart';
 import 'package:palette/models/home%20models/notification_model.dart';
 import 'package:palette/models/home%20models/personal_status_model.dart';
 import 'package:palette/models/home%20models/restaurant_details_model.dart';
+import 'package:palette/models/user%20models/favorite_menu_folder_model.dart';
 import 'package:palette/services/home%20services/home_service.dart';
 import 'package:palette/models/home%20models/submit_feedback_model.dart';
 import 'package:palette/views/Home/checkin_model.dart';
@@ -89,7 +89,7 @@ class HomeRepository {
     return _homeService.postCheckIn(restaurantId);
   }
 
-  Future<FoldersResponse> getMyFolders() async {
+  Future<FavoriteMenuFoldersFetchResponse> getMyFolders() async {
     return await _homeService.fetchMyFolder();
   }
 

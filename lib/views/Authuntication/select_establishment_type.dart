@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:palette/views/Authuntication/sign_up_page.dart';
 import 'package:palette/views/res/colors.dart';
 import '../res/commonWidgets.dart';
 import '../res/image_path.dart';
@@ -97,9 +96,7 @@ class _SelectEstablishmentTypeState extends State<SelectEstablishmentType> {
                     colorText: Colors.white,
                     snackPosition: SnackPosition.BOTTOM,
                   );
-                } else {
-                  Get.to(SignUpPage(isAdmin: true));
-                }
+                } else {}
               },
             ),
             SizedBox(

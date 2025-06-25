@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:palette/views/Authuntication/select_establishment_type.dart';
 import 'package:palette/views/Authuntication/sign_in_page.dart';
+import 'package:palette/views/Authuntication/sign_up_page.dart';
 import '../res/commonWidgets.dart';
 import '../res/image_path.dart';
 
@@ -50,7 +50,7 @@ class SelectRolePage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               commonButton("Establishment Owner", onTap: () {
-                Get.to(SelectEstablishmentType());
+                Get.to(SignUpPage(isAdmin: true));
               }),
               const SizedBox(height: 20),
             ],

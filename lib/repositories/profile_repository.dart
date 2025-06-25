@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:palette/models/unfavorite_model.dart';
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
 import 'package:palette/models/user%20models/add_new_log_model.dart';
 import 'package:palette/models/user%20models/catagory_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
+import 'package:palette/models/user%20models/favorite_menu_folder_model.dart';
 import 'package:palette/models/user%20models/my_feedback_model.dart';
 import 'package:palette/models/user%20models/my_log_model.dart';
 import 'package:palette/models/user%20models/pin_unpin_model.dart';
+import 'package:palette/models/user%20models/resturent_favorite_model.dart';
 import 'package:palette/models/user%20models/top_reated_iteams_model.dart';
 import 'package:palette/models/user%20models/update_user_model.dart';
 import 'package:palette/models/user%20models/user_profile.dart';
@@ -84,5 +87,22 @@ class ProfileRepository {
 
   Future<FeedbackPinUnpinResponse> togglePinUnpin(String feedbackId) {
     return userService.togglePinUnpinFeedback(feedbackId);
+  }
+
+  Future<FavouriteRestaurantsResponse> getMyfavoriteResturent() {
+    return userService.getMyFavoriteResturent();
+  }
+
+  Future<FavoriteMenuFoldersFetchResponse> getMyfavoriteMenuFoler() {
+    return userService.getMyFavoriteMenuFoler();
+  }
+
+  Future<UnfavouriteResponse> unFavourite(
+      {String? restaurantId, String? menuId}) {
+    final body = <String, String>{};
+    if (restaurantId != null) body['restaurant'] = restaurantId;
+    if (menuId != null) body['menu'] = menuId;
+
+    return userService.unFavorite(body);
   }
 }

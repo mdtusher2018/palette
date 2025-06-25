@@ -239,7 +239,8 @@ Widget cardDesign(
         color: AppColors.primary,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: commonText(label, size: 14, isBold: true, color: AppColors.white),
+      child: commonText(label,
+          maxline: 1, size: 14, isBold: true, color: AppColors.white),
     );
   }
 
@@ -281,16 +282,6 @@ Widget cardDesign(
                   ),
                 ),
               ),
-              if (isdelete)
-                Positioned(
-                  top: 8,
-                  left: (isleft) ? null : 8,
-                  right: (isleft) ? 8 : null,
-                  child: Image.asset(
-                    AppAssetsPath.delete,
-                    width: 24,
-                  ),
-                ),
             ],
           ),
         ),

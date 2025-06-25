@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:palette/models/unfavorite_model.dart';
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
 import 'package:palette/models/user%20models/add_new_log_model.dart';
 import 'package:palette/models/user%20models/catagory_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
+import 'package:palette/models/user%20models/favorite_menu_folder_model.dart';
 import 'package:palette/models/user%20models/my_feedback_model.dart';
 import 'package:palette/models/user%20models/my_log_model.dart';
 import 'package:palette/models/user%20models/pin_unpin_model.dart';
+import 'package:palette/models/user%20models/resturent_favorite_model.dart';
 import 'package:palette/models/user%20models/top_reated_iteams_model.dart';
 import 'package:palette/models/user%20models/update_user_model.dart';
 import 'package:http/http.dart' as http;
@@ -217,5 +220,21 @@ class ProfileService {
     final responseJson =
         await apiService.get(ApiEndpoints.pinUnpin(feedbackId));
     return FeedbackPinUnpinResponse.fromJson(responseJson);
+  }
+
+  Future<FavouriteRestaurantsResponse> getMyFavoriteResturent() async {
+    final responseJson = await apiService.get(ApiEndpoints.myFavoriteResturent);
+    return FavouriteRestaurantsResponse.fromJson(responseJson);
+  }
+
+  Future<FavoriteMenuFoldersFetchResponse> getMyFavoriteMenuFoler() async {
+    final responseJson =
+        await apiService.get(ApiEndpoints.myFavoriteMenuFolders);
+    return FavoriteMenuFoldersFetchResponse.fromJson(responseJson);
+  }
+
+  Future<UnfavouriteResponse> unFavorite(Map<String, String> body) async {
+    final responseJson = await apiService.post(ApiEndpoints.unFavorite, body);
+    return UnfavouriteResponse.fromJson(responseJson);
   }
 }

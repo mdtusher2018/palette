@@ -2,8 +2,8 @@ class ApiEndpoints {
   // static const String baseUrl = 'http://172.252.13.74:8029/api/v1/';//live
   // static const String imageUrl = 'http://172.252.13.74:8029/';
 
-  static const String baseUrl = 'http://172.252.13.74:8029/api/v1/';
-  static const String imageUrl = 'http://172.252.13.74:8029';
+  static const String baseUrl = 'http://10.0.70.37:8029/api/v1/';
+  static const String imageUrl = 'http://10.0.70.37:8029';
   // Auth endpoints
   static const String signIn = 'auth/local';
   static const String signUp = 'auth/sign-up';
@@ -66,4 +66,9 @@ class ApiEndpoints {
   static String getAllFeedByUSerId(String id) => "logs/logsByUserId/$id";
   static String getAllBadgeByUSerId(String id) => "userChallenge/badges/$id";
   static String followUnfollow(String id) => "users/follow/$id";
+
+  //favorite
+  static const String myFavoriteResturent = "favourite/favourite-restaurant";
+  static const String myFavoriteMenuFolders = "folder/menu-folders";
+  static const String unFavorite = "favourite/unfavourite";
 }
