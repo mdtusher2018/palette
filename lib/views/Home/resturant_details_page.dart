@@ -88,11 +88,13 @@ class RestaurantDetailsPage extends StatelessWidget {
                       children: [
                         Icon(Icons.star, color: Colors.amber, size: 16),
                         SizedBox(width: 4),
-                        commonText(
-                            controller
-                                .restaurantDetails.value!.restaurant!.rating
-                                .toString(),
-                            size: 14),
+                        if (controller.restaurantDetails.value!.restaurant !=
+                            null)
+                          commonText(
+                              controller
+                                  .restaurantDetails.value!.restaurant!.rating
+                                  .toString(),
+                              size: 14),
                       ],
                     ),
                     Row(
@@ -134,18 +136,8 @@ class RestaurantDetailsPage extends StatelessWidget {
                             onPressed: () {
                               controller.fetchFolders().then(
                                 (value) {
-                                  showAddToFavoriteDialog(
-                                    context,
-                                    favorites: controller.folderList,
-                                    postFolder: (value) async {
-                                      return await controller
-                                          .createNewFolder(value);
-                                    },
-                                    onFolderTap: (folderId) {
-                                      controller.addFavourite(
-                                          restaurantId: id, folderId: folderId);
-                                    },
-                                  );
+                                  controller.addFavourite(
+                                      restaurantId: id, folderId: "");
                                 },
                               );
                             },
@@ -211,8 +203,9 @@ class RestaurantDetailsPage extends StatelessWidget {
                                 if (controller.restaurantDetails.value!
                                             .restaurant !=
                                         null &&
-                                    !controller.restaurantDetails.value!
-                                        .restaurant!.checkin!) {
+                                    controller.restaurantDetails.value!
+                                            .restaurant!.checkin !=
+                                        null) {
                                   controller.checkInToRestaurant(id).then(
                                       (value) => controller
                                           .fetchRestaurantDetails(id));
@@ -269,12 +262,18 @@ class RestaurantDetailsPage extends StatelessWidget {
                                                   .value!
                                                   .feedbacks[index]
                                                   .createdAt,
-                                              'profileImage': controller
-                                                      .restaurantDetails
-                                                      .value!
-                                                      .feedbacks[index]
-                                                      .reviewerImage!
-                                                      .isNotEmpty
+                                              'profileImage': (controller
+                                                              .restaurantDetails
+                                                              .value!
+                                                              .feedbacks[index]
+                                                              .reviewerImage !=
+                                                          null &&
+                                                      controller
+                                                          .restaurantDetails
+                                                          .value!
+                                                          .feedbacks[index]
+                                                          .reviewerImage!
+                                                          .isNotEmpty)
                                                   ? getFullImagePath(controller
                                                           .restaurantDetails
                                                           .value!

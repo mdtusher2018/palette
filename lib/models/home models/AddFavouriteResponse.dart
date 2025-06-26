@@ -57,12 +57,12 @@ class FavouriteAttributes {
 
   factory FavouriteAttributes.fromJson(Map<String, dynamic> json) {
     return FavouriteAttributes(
-      id: json['_id'],
-      user: json['user'],
-      restaurant: json['restaurant'],
-      folder: json['folder'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      id: json['_id'] ?? "",
+      user: json['user'] ?? "",
+      restaurant: json['restaurant'] ?? "",
+      folder: json['folder'] ?? "",
+      createdAt: json['createdAt'] ?? "",
+      updatedAt: json['updatedAt'] ?? "",
     );
   }
 }

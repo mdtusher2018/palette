@@ -107,7 +107,7 @@ class ProfileRepository {
     return userService.unFavorite(body);
   }
 
-  Future<FolderWiseFavouriteResponse> menuByFolderId({required String id}) {
+  Future<FavouriteFoundResponse> menuByFolderId({required String id}) {
     return userService.menuByFolderId(id: id);
   }
 }

@@ -62,59 +62,63 @@ class _RootPageState extends State<RootPage> {
       ),
 
       // Bottom Nav
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: AppColors.backgroundWhite,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 2,
-              offset: Offset(0, -2),
-            )
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: List.generate(icons.length, (index) {
-            final isSelected = index == _selectedIndex;
-            return GestureDetector(
-              onTap: () => _onTap(index),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (isSelected)
-                    Container(
-                      width: 50,
-                      height: 6,
-                      decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16))),
-                    ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Image.asset(
-                    icons[index],
-                    height: 24,
-                    width: 24,
-                    color: isSelected ? AppColors.primary : AppColors.gray,
-                  ),
-                  const SizedBox(height: 4),
-                  commonText(
-                    labels[index],
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected ? AppColors.primary : AppColors.gray,
-                  ),
+      bottomNavigationBar: (widget.userInfo.role == "restaurant")
+          ? null
+          : Container(
+              decoration: const BoxDecoration(
+                color: AppColors.backgroundWhite,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 2,
+                    offset: Offset(0, -2),
+                  )
                 ],
               ),
-            );
-          }),
-        ),
-      ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(icons.length, (index) {
+                  final isSelected = index == _selectedIndex;
+                  return GestureDetector(
+                    onTap: () => _onTap(index),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (isSelected)
+                          Container(
+                            width: 50,
+                            height: 6,
+                            decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(16),
+                                    bottomRight: Radius.circular(16))),
+                          ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Image.asset(
+                          icons[index],
+                          height: 24,
+                          width: 24,
+                          color:
+                              isSelected ? AppColors.primary : AppColors.gray,
+                        ),
+                        const SizedBox(height: 4),
+                        commonText(
+                          labels[index],
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          color:
+                              isSelected ? AppColors.primary : AppColors.gray,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            ),
     );
   }
 }

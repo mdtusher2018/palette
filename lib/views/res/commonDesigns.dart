@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
@@ -73,7 +75,7 @@ Widget challengeCard(SingleChallenge data) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            Flexible(
               child: commonText(data.challengeDescription,
                   size: 12, color: AppColors.gray),
             ),
@@ -81,7 +83,7 @@ Widget challengeCard(SingleChallenge data) {
               width: 16,
             ),
             Row(
-              children: List.generate(data.requiredSteps, (index) {
+              children: List.generate(min(data.requiredSteps, 10), (index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 1.5),
                   child: Icon(

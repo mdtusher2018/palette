@@ -141,8 +141,9 @@ class HomeService {
     required String folderId,
   }) async {
     final response = await apiService.post(ApiEndpoints.addFavorite, {
-      "folder": folderId,
-      "restaurant": restaurantId,
+      if (folderId.isNotEmpty) "folder": folderId,
+      if (folderId.isNotEmpty) "menu": restaurantId,
+      if (folderId.isEmpty) "restaurant": restaurantId,
     });
 
     return AddFavouriteResponse.fromJson(response);

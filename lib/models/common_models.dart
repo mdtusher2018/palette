@@ -6,6 +6,7 @@ class UserAttributes {
   final String coverImage;
   final bool isComplete;
   final bool isBan;
+  final bool verified;
   final String role;
   final String createdAt;
   final String updatedAt;
@@ -16,6 +17,7 @@ class UserAttributes {
   UserAttributes({
     required this.id,
     required this.fullName,
+    required this.verified,
     required this.email,
     required this.image,
     required this.coverImage,
@@ -31,6 +33,7 @@ class UserAttributes {
 
   factory UserAttributes.fromJson(Map<String, dynamic> json) {
     return UserAttributes(
+      verified: json['verified'] ?? false,
       id: json['_id'] ?? '',
       fullName: json['fullName'] ?? 'N/A',
       email: json['email'] ?? '',

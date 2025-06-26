@@ -148,6 +148,7 @@ class RestaurantDetailsController extends GetxController {
       );
       Get.snackbar("Success", response.message);
     } catch (e) {
+      log(e.toString());
       Get.snackbar("Error", "Failed to add to favourites: $e");
     } finally {
       isLoading.value = false;

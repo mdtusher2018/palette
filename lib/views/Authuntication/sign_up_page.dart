@@ -130,7 +130,8 @@ class SignUpPage extends StatelessWidget {
                       return;
                     }
 
-                    authController.signUp(fullName, email, password);
+                    authController.signUp(fullName, email, password,
+                        isAdmin: isAdmin ?? false);
                   },
                 );
               }),

@@ -12,13 +12,46 @@ import 'package:palette/views/res/commonDesigns.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 import 'package:palette/views/Home/food_details_page.dart';
 import 'package:palette/views/Notification/notifications_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
   UserAttributes userInfo;
   HomePage({super.key, required this.userInfo});
+  final String dashboardUrl = 'https://www.palatte.com/dashboard';
+
+  Future<void> _launchDashboard() async {
+    final Uri url = Uri.parse(dashboardUrl);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $dashboardUrl';
+    }
+  }
+
+  void showPendingApprovalDialog() {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        content: commonText(
+            'Your account is currently pending approval. You will be notified once it is approved',
+            size: 18,
+            textAlign: TextAlign.center,
+            isBold: true),
+      ),
+      barrierDismissible: false, // Prevent closing by tapping outside
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!userInfo.verified) {
+        showPendingApprovalDialog();
+      }
+    });
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
@@ -27,8 +60,9 @@ class HomePage extends StatelessWidget {
           children: [
             commonText(userInfo.fullName,
                 size: 16, isBold: true, color: AppColors.white),
-            commonText("What tasty food will you try today?",
-                size: 12, color: AppColors.white),
+            if (userInfo.role != "restaurant")
+              commonText("What tasty food will you try today?",
+                  size: 12, color: AppColors.white),
           ],
         ),
         centerTitle: false,
@@ -59,143 +93,196 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      bottomSheet: SizedBox(
-        height: double.infinity,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      bottomSheet: (userInfo.role == "restaurant")
+          ? Column(
               children: [
-                // Promo Banner
-                Obx(() {
-                  if (homeController.isLoading.value) {
-                    return SizedBox(
-                      height: 150,
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
+                Spacer(),
+                commonText(
+                  "Access your dashboard by\nclicking the link below",
+                  size: 18,
+                  isBold: true,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: commonText(dashboardUrl, size: 14, isBold: true),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.open_in_new),
+                        onPressed: _launchDashboard,
+                      )
+                    ],
+                  ),
+                ),
+                Spacer(
+                  flex: 2,
+                ),
+              ],
+            )
+          : SizedBox(
+              height: double.infinity,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Promo Banner
+                      Obx(() {
+                        if (homeController.isLoading.value) {
+                          return SizedBox(
+                            height: 150,
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
 
-                  if (homeController.ads.isEmpty) {
-                    return SizedBox(); // or show "No Ads"
-                  }
+                        if (homeController.ads.isEmpty) {
+                          return SizedBox(); // or show "No Ads"
+                        }
 
-                  List<String> imageUrls = homeController.ads
-                      .map((ad) => getFullImagePath("/${ad.image}"))
-                      .toList();
+                        List<String> imageUrls = homeController.ads
+                            .map((ad) => getFullImagePath("/${ad.image}"))
+                            .toList();
 
-                  return AdsCarousel(imageUrls: imageUrls);
-                }),
+                        return AdsCarousel(imageUrls: imageUrls);
+                      }),
 
-                SizedBox(height: 20),
+                      SizedBox(height: 20),
 
-                // Highlights of the Week
-                if (homeController.highlights.isNotEmpty)
-                  commonText("Highlights of the Week", size: 16, isBold: true),
-                SizedBox(height: 12),
-                Obx(() {
-                  if (homeController.highlights.isEmpty) {
-                    return SizedBox();
-                  }
-                  return SizedBox(
-                      height: 200,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
+                      // Highlights of the Week
+                      Obx(
+                        () {
+                          if (homeController.highlights.isNotEmpty) {
+                            return commonText("Highlights of the Week",
+                                size: 16, isBold: true);
+                          }
+                          return SizedBox();
+                        },
+                      ),
+                      SizedBox(height: 12),
+                      Obx(() {
+                        if (homeController.highlights.isEmpty) {
+                          return SizedBox();
+                        }
+                        return SizedBox(
+                            height: 200,
+                            child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  FoodMenu highLight =
+                                      homeController.highlights[index];
+                                  return InkWell(
+                                    onTap: () {
+                                      navigateToPage(FoodDetailsPage(
+                                        id: highLight.id,
+                                      ));
+                                    },
+                                    child: cardDesign(
+                                      width: 190.0,
+                                      name: highLight.name,
+                                      imageUrl: getFullImagePath(highLight
+                                              .image ??
+                                          "https://dynamic-media.tacdn.com/media/photo-o/2e/d4/44/98/caption.jpg?w=700&h=500&s=1"),
+                                      buttonName: highLight.category,
+                                      ratting: highLight.rating.toString(),
+                                      location: highLight.restaurentName,
+                                      isleft: true,
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(
+                                    width: 16,
+                                  );
+                                },
+                                itemCount: homeController.highlights.length));
+                      }),
+
+                      SizedBox(height: 20),
+
+                      // Stats Section
+                      commonText("Your Stats", size: 16, isBold: true),
+                      SizedBox(height: 12),
+                      Obx(() {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _buildStatCard(
+                                "Logs This Week",
+                                (homeController.userStatus.value != null)
+                                    ? homeController
+                                        .userStatus.value!.logThisWeek
+                                        .toString()
+                                    : "0"),
+                            _buildStatCard(
+                                "Favorite",
+                                (homeController.userStatus.value != null)
+                                    ? homeController
+                                        .userStatus.value!.favourites
+                                        .toString()
+                                    : "0"),
+                            _buildStatCard(
+                              "Most Visited",
+                              (homeController.userStatus.value != null)
+                                  ? homeController.userStatus.value!.mostVisited
+                                  : "N/A",
+                            ),
+                          ],
+                        );
+                      }),
+
+                      SizedBox(height: 20),
+
+                      // For You
+                      Obx(
+                        () {
+                          if (homeController.highlights.isNotEmpty) {
+                            return commonText("For You",
+                                size: 16, isBold: true);
+                          }
+                          return SizedBox();
+                        },
+                      ),
+
+                      SizedBox(height: 12),
+                      Obx(() {
+                        if (homeController.isLoading.value) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: homeController.foryou.length,
                           itemBuilder: (context, index) {
-                            FoodMenu highLight =
-                                homeController.highlights[index];
-                            return InkWell(
-                              onTap: () {
+                            return _buildLogsCardDesign(
+                              card: homeController.foryou[index],
+                              ontap: () {
                                 navigateToPage(FoodDetailsPage(
-                                  id: highLight.id,
+                                  id: homeController.foryou[index].id,
                                 ));
                               },
-                              child: cardDesign(
-                                width: 190.0,
-                                name: highLight.name,
-                                imageUrl: getFullImagePath(highLight.image ??
-                                    "https://dynamic-media.tacdn.com/media/photo-o/2e/d4/44/98/caption.jpg?w=700&h=500&s=1"),
-                                buttonName: highLight.category,
-                                ratting: highLight.rating.toString(),
-                                location: highLight.restaurentName,
-                                isleft: true,
-                              ),
                             );
                           },
-                          separatorBuilder: (context, index) {
-                            return SizedBox(
-                              width: 16,
-                            );
-                          },
-                          itemCount: homeController.highlights.length));
-                }),
-
-                SizedBox(height: 20),
-
-                // Stats Section
-                commonText("Your Stats", size: 16, isBold: true),
-                SizedBox(height: 12),
-                Obx(() {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildStatCard(
-                          "Logs This Week",
-                          (homeController.userStatus.value != null)
-                              ? homeController.userStatus.value!.logThisWeek
-                                  .toString()
-                              : "0"),
-                      _buildStatCard(
-                          "Favorite",
-                          (homeController.userStatus.value != null)
-                              ? homeController.userStatus.value!.favourites
-                                  .toString()
-                              : "0"),
-                      _buildStatCard(
-                        "Most Visited",
-                        (homeController.userStatus.value != null)
-                            ? homeController.userStatus.value!.mostVisited
-                            : "N/A",
-                      ),
+                        );
+                      })
+                      // Chicken Burger again
                     ],
-                  );
-                }),
-
-                SizedBox(height: 20),
-
-                // For You
-                if (homeController.foryou.isNotEmpty)
-                  commonText("For You", size: 16, isBold: true),
-                SizedBox(height: 12),
-                Obx(() {
-                  if (homeController.isLoading.value) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: homeController.foryou.length,
-                    itemBuilder: (context, index) {
-                      return _buildLogsCardDesign(
-                        card: homeController.foryou[index],
-                        ontap: () {
-                          navigateToPage(FoodDetailsPage(
-                            id: homeController.foryou[index].id,
-                          ));
-                        },
-                      );
-                    },
-                  );
-                })
-                // Chicken Burger again
-              ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 

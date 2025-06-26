@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:palette/models/auth%20models/GoogleSignInResponseModel.dart';
 import 'package:palette/models/auth%20models/email_verified_model.dart';
 import 'package:palette/models/auth%20models/forget_password_model.dart';
@@ -47,5 +49,28 @@ class AuthRepository {
 
   Future<ResendOtpResponse> resendOtp(String email) {
     return authService.resendOtp(email);
+  }
+
+  Future<SignupResponse> registerEstablishment({
+    required String estublishName,
+    required String email,
+    required String establishmentType,
+    required String role,
+    required String password,
+    required double latitude,
+    required double longitude,
+    required File imageFile,
+  }) async {
+    final response = await authService.createEstablishment(
+      estublishName: estublishName,
+      email: email,
+      establishmentType: establishmentType,
+      role: role,
+      password: password,
+      latitude: latitude,
+      longitude: longitude,
+      imageFile: imageFile,
+    );
+    return response;
   }
 }

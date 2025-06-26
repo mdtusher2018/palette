@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
 import 'package:palette/models/auth%20models/GoogleSignInResponseModel.dart';
 import 'package:palette/models/auth%20models/email_verified_model.dart';
 import 'package:palette/models/auth%20models/forget_password_model.dart';
@@ -94,5 +99,49 @@ class AuthService {
 
     final jsonResponse = await apiService.post(ApiEndpoints.resendOtp, body);
     return ResendOtpResponse.fromJson(jsonResponse);
+  }
+
+  Future<SignupResponse> createEstablishment({
+    required String estublishName,
+    required String email,
+    required String establishmentType,
+    required String role,
+    required String password,
+    required double latitude,
+    required double longitude,
+    required File imageFile,
+  }) async {
+    final url = Uri.parse('${ApiEndpoints.baseUrl}${ApiEndpoints.signUp}');
+
+    final request = http.MultipartRequest('POST', url);
+
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      imageFile.path,
+    ));
+
+    final payload = {
+      "fullName": estublishName,
+      "email": email,
+      "establishmentType": establishmentType,
+      "role": role,
+      "password": password,
+      "location": {
+        "type": "Point",
+        "coordinates": [longitude, latitude],
+      },
+    };
+
+    request.fields['data'] = jsonEncode(payload);
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    log(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return SignupResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Failed: ${response.statusCode} ${response.body}");
+    }
   }
 }

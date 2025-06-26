@@ -1,12 +1,20 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:palette/views/Authuntication/address_screen.dart';
 import 'package:palette/views/res/colors.dart';
 import '../res/commonWidgets.dart';
 import '../res/image_path.dart';
 
 class SelectEstablishmentType extends StatefulWidget {
-  const SelectEstablishmentType({super.key});
+  SelectEstablishmentType(
+      {super.key,
+      required this.estublishName,
+      required this.email,
+      required this.password});
 
+  String estublishName, email, password;
   @override
   State<SelectEstablishmentType> createState() =>
       _SelectEstablishmentTypeState();
@@ -96,7 +104,14 @@ class _SelectEstablishmentTypeState extends State<SelectEstablishmentType> {
                     colorText: Colors.white,
                     snackPosition: SnackPosition.BOTTOM,
                   );
-                } else {}
+                } else {
+                  navigateToPage(AddBusinessAddressScreen(
+                    email: widget.email,
+                    estublishName: widget.estublishName,
+                    estublishType: selected!,
+                    password: widget.password,
+                  ));
+                }
               },
             ),
             SizedBox(

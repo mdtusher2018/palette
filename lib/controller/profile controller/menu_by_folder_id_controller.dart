@@ -1,38 +1,38 @@
 import 'package:get/get.dart';
 import 'package:palette/models/user%20models/_folder_wise_favorite_menu.dart';
 import 'package:palette/repositories/profile_repository.dart';
+import 'package:palette/services/api_service.dart';
+import 'package:palette/services/profile_service.dart';
 
-class MenuByFolderId extends GetxController {
-  final ProfileRepository profileRepository;
-  final String id;
+class MenuByFolderIdController extends GetxController {
+  final ProfileRepository profileRepository =
+      ProfileRepository(ProfileService(ApiService()));
+  final String folderId;
 
-  MenuByFolderId(this.profileRepository, this.id);
+  MenuByFolderIdController(this.folderId);
 
-  // Rxn allows null value initially
-  Rxn<FolderWiseFavouriteAttribute> folderWiseFavouriteAttribute =
-      Rxn<FolderWiseFavouriteAttribute>();
-
+  Rxn<FavouriteAttribute> favouriteAttribute = Rxn<FavouriteAttribute>();
   RxBool isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchFavoriteByFolderId();
+    fetchFavouriteMenus();
   }
 
-  Future<void> fetchFavoriteByFolderId() async {
+  Future<void> fetchFavouriteMenus() async {
     try {
       isLoading.value = true;
 
-      final response = await profileRepository.menuByFolderId(id: id);
+      final response = await profileRepository.menuByFolderId(id: folderId);
 
       if (response.data.attributes.isNotEmpty) {
-        folderWiseFavouriteAttribute.value = response.data.attributes.first;
+        favouriteAttribute.value = response.data.attributes.first;
       } else {
         Get.snackbar('Oops!', 'No favourites found for this folder.');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch logs');
+      Get.snackbar('Error', 'Failed to fetch favourites');
     } finally {
       isLoading.value = false;
     }

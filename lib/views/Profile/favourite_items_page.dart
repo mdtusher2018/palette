@@ -1,31 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/profile%20controller/menu_by_folder_id_controller.dart';
+import 'package:palette/utils/helper.dart';
 
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonDesigns.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 
-class TopicWiseFavoritePage extends StatefulWidget {
+class TopicWiseFavoritePage extends StatelessWidget {
   final String folderId; // Pass this in Navigator
 
   const TopicWiseFavoritePage({super.key, required this.folderId});
 
   @override
-  State<TopicWiseFavoritePage> createState() => _TopicWiseFavoritePageState();
-}
-
-class _TopicWiseFavoritePageState extends State<TopicWiseFavoritePage> {
-  late final MenuByFolderId controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = Get.put(MenuByFolderId(Get.find(), widget.folderId));
-  }
-
-  @override
   Widget build(BuildContext context) {
+    MenuByFolderIdController controller =
+        Get.put(MenuByFolderIdController(folderId));
     return Scaffold(
       appBar: AppBar(
         title: commonText("Favorites",
@@ -34,33 +24,36 @@ class _TopicWiseFavoritePageState extends State<TopicWiseFavoritePage> {
         leading: commonBackButton(),
       ),
       backgroundColor: AppColors.primary,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      bottomSheet: SizedBox(
+        height: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          final attribute = controller.folderWiseFavouriteAttribute.value;
+            final attribute = controller.favouriteAttribute.value;
 
-          if (attribute == null || attribute.favourites.isEmpty) {
-            return Center(
-                child:
-                    commonText("No favorites found", size: 16, isBold: true));
-          }
+            if (attribute == null || attribute.favourites.isEmpty) {
+              return Center(
+                  child:
+                      commonText("No favorites found", size: 16, isBold: true));
+            }
 
-          return gridSection(attribute.favourites.map((fav) {
-            final menu = fav.menu;
-            return cardDesign(
-              imageUrl: menu.image,
-              buttonName: menu.category.name.toString(),
-              ratting: menu.rating.toString(),
-              location: menu.restaurent.fullName,
-              name: menu.itemName,
-              isleft: false,
-            );
-          }).toList());
-        }),
+            return gridSection(attribute.favourites.map((fav) {
+              final menu = fav.menu;
+              return cardDesign(
+                imageUrl: getFullImagePath(menu.image),
+                buttonName: menu.category.name.toString(),
+                ratting: menu.rating.toString(),
+                location: menu.restaurent.fullName,
+                name: menu.itemName,
+                isleft: false,
+              );
+            }).toList());
+          }),
+        ),
       ),
     );
   }

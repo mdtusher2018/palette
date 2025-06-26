@@ -6,7 +6,7 @@ class ApiEndpoints {
   static const String imageUrl = 'http://10.0.70.37:8029';
   // Auth endpoints
   static const String signIn = 'auth/local';
-  static const String signUp = 'auth/sign-up';
+  static const String signUp = 'auth/signup';
   static const String googleSignin = 'auth/signInGoogle';
   static const String verifyEmail = 'auth/verify-email';
   static const String forgetPassword = 'auth/forget-password';

@@ -154,7 +154,10 @@ class MyPalettePage extends StatelessWidget {
                 // Navigate to Add New Log Page
                 Get.to(() => AddNewLogPage(), binding: BindingsBuilder(() {
                   Get.put(AddNewLogController());
-                }));
+                }))!
+                    .then((w) {
+                  controller.fetchMyLogs();
+                });
               },
               icon: Icon(
                 Icons.add,

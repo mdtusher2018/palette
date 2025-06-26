@@ -1,101 +1,102 @@
-import 'package:palette/models/common_models.dart';
-
-class FolderWiseFavouriteResponse {
+class FavouriteFoundResponse {
   final String status;
   final int statusCode;
   final String message;
-  final FolderWiseFavouriteData data;
+  final FavouriteData data;
+  final List<dynamic> errors;
 
-  FolderWiseFavouriteResponse({
+  FavouriteFoundResponse({
     required this.status,
     required this.statusCode,
     required this.message,
     required this.data,
+    required this.errors,
   });
 
-  factory FolderWiseFavouriteResponse.fromJson(Map<String, dynamic> json) {
-    return FolderWiseFavouriteResponse(
-      status: json['status'],
-      statusCode: json['statusCode'],
-      message: json['message'],
-      data: FolderWiseFavouriteData.fromJson(json['data']),
+  factory FavouriteFoundResponse.fromJson(Map<String, dynamic> json) {
+    return FavouriteFoundResponse(
+      status: json['status'] ?? '',
+      statusCode: json['statusCode'] ?? 0,
+      message: json['message'] ?? '',
+      data: FavouriteData.fromJson(json['data'] ?? {}),
+      errors: json['errors'] ?? [],
     );
   }
 }
 
-class FolderWiseFavouriteData {
+class FavouriteData {
   final String type;
-  final List<FolderWiseFavouriteAttribute> attributes;
+  final List<FavouriteAttribute> attributes;
 
-  FolderWiseFavouriteData({
+  FavouriteData({
     required this.type,
     required this.attributes,
   });
 
-  factory FolderWiseFavouriteData.fromJson(Map<String, dynamic> json) {
-    return FolderWiseFavouriteData(
-      type: json['type'],
-      attributes: List<FolderWiseFavouriteAttribute>.from(
-        json['attributes'].map((x) => FolderWiseFavouriteAttribute.fromJson(x)),
-      ),
+  factory FavouriteData.fromJson(Map<String, dynamic> json) {
+    return FavouriteData(
+      type: json['type'] ?? '',
+      attributes: (json['attributes'] as List)
+          .map((e) => FavouriteAttribute.fromJson(e))
+          .toList(),
     );
   }
 }
 
-class FolderWiseFavouriteAttribute {
+class FavouriteAttribute {
   final String folderName;
   final String folderId;
-  final List<FolderWiseFavouriteItem> favourites;
+  final List<FavouriteItem> favourites;
 
-  FolderWiseFavouriteAttribute({
+  FavouriteAttribute({
     required this.folderName,
     required this.folderId,
     required this.favourites,
   });
 
-  factory FolderWiseFavouriteAttribute.fromJson(Map<String, dynamic> json) {
-    return FolderWiseFavouriteAttribute(
-      folderName: json['folderName'],
-      folderId: json['folderId'],
-      favourites: List<FolderWiseFavouriteItem>.from(
-        json['favourites'].map((x) => FolderWiseFavouriteItem.fromJson(x)),
-      ),
+  factory FavouriteAttribute.fromJson(Map<String, dynamic> json) {
+    return FavouriteAttribute(
+      folderName: json['folderName'] ?? '',
+      folderId: json['folderId'] ?? '',
+      favourites: (json['favourites'] as List)
+          .map((e) => FavouriteItem.fromJson(e))
+          .toList(),
     );
   }
 }
 
-class FolderWiseFavouriteItem {
+class FavouriteItem {
   final String id;
-  final FolderWiseMenu menu;
+  final Menu menu;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  FolderWiseFavouriteItem({
+  FavouriteItem({
     required this.id,
     required this.menu,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory FolderWiseFavouriteItem.fromJson(Map<String, dynamic> json) {
-    return FolderWiseFavouriteItem(
-      id: json['_id'],
-      menu: FolderWiseMenu.fromJson(json['menu']),
+  factory FavouriteItem.fromJson(Map<String, dynamic> json) {
+    return FavouriteItem(
+      id: json['_id'] ?? '',
+      menu: Menu.fromJson(json['menu'] ?? {}),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }
 
-class FolderWiseMenu {
+class Menu {
   final String id;
   final String itemName;
   final String image;
   final double rating;
   final Category category;
-  final FolderWiseRestaurant restaurent;
+  final Restaurant restaurent;
 
-  FolderWiseMenu({
+  Menu({
     required this.id,
     required this.itemName,
     required this.image,
@@ -104,31 +105,48 @@ class FolderWiseMenu {
     required this.restaurent,
   });
 
-  factory FolderWiseMenu.fromJson(Map<String, dynamic> json) {
-    return FolderWiseMenu(
-      id: json['_id'],
-      itemName: json['itemName'],
-      image: json['image'],
-      rating: (json['rating'] as num).toDouble(),
-      category: Category.fromJson(json['category']),
-      restaurent: FolderWiseRestaurant.fromJson(json['restaurent']),
+  factory Menu.fromJson(Map<String, dynamic> json) {
+    return Menu(
+      id: json['_id'] ?? '',
+      itemName: json['itemName'] ?? '',
+      image: json['image'] ?? '',
+      rating: (json['rating'] ?? 0).toDouble(),
+      category: Category.fromJson(json['category'] ?? {}),
+      restaurent: Restaurant.fromJson(json['restaurent'] ?? {}),
     );
   }
 }
 
-class FolderWiseRestaurant {
+class Category {
+  final String id;
+  final String name;
+
+  Category({
+    required this.id,
+    required this.name,
+  });
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      id: json['_id'] ?? '',
+      name: json['name'] ?? '',
+    );
+  }
+}
+
+class Restaurant {
   final String id;
   final String fullName;
 
-  FolderWiseRestaurant({
+  Restaurant({
     required this.id,
     required this.fullName,
   });
 
-  factory FolderWiseRestaurant.fromJson(Map<String, dynamic> json) {
-    return FolderWiseRestaurant(
-      id: json['_id'],
-      fullName: json['fullName'],
+  factory Restaurant.fromJson(Map<String, dynamic> json) {
+    return Restaurant(
+      id: json['_id'] ?? '',
+      fullName: json['fullName'] ?? '',
     );
   }
 }

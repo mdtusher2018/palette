@@ -1,5 +1,6 @@
 // lib/controllers/auth_controller.dart
 import 'dart:async';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:palette/models/auth%20models/GoogleSignInResponseModel.dart';
@@ -12,6 +13,7 @@ import 'package:palette/models/auth%20models/signup_model.dart';
 import 'package:palette/services/local_storage_service.dart';
 import 'package:palette/views/Authuntication/enter_otp_page.dart';
 import 'package:palette/views/Authuntication/new_password_page.dart';
+import 'package:palette/views/Authuntication/select_establishment_type.dart';
 import 'package:palette/views/Authuntication/sign_in_page.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 import 'package:palette/views/root_page.dart';
@@ -62,6 +64,7 @@ class AuthController extends GetxController {
         if (isRememberMeChecked) {
           LocalStorageService().saveLoginToLocal(email, password);
         }
+
         navigateToPage(
             RootPage(
               userInfo: response.data.attributes,
@@ -103,22 +106,79 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> signUp(String fullName, String email, String password) async {
+  Future<void> signUp(
+    String fullName,
+    String email,
+    String password, {
+    required bool isAdmin,
+  }) async {
     var signupResponse = Rxn<SignupResponse>();
+
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
-      final response = await authRepository.signUp(fullName, email, password);
+      if (!isAdmin) {
+        isLoading.value = true;
+        errorMessage.value = '';
+        final response = await authRepository.signUp(fullName, email, password);
+        signupResponse.value = response;
+        isLoading.value = false;
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          LocalStorageService().saveToken(response.data.signUpToken);
+          navigateToPage(EnterOtpPage(
+            email: email,
+            isEmailVerified: true,
+          ));
+        } else {
+          otpErrorMessage.value = response.message;
+        }
+      } else {
+        navigateToPage(SelectEstablishmentType(
+          email: email,
+          password: password,
+          estublishName: fullName,
+        ));
+      }
+    } catch (e) {
+      isLoading.value = false;
+      errorMessage.value = e.toString();
+    }
+  }
+
+  Future<void> signUpEstablishOwner({
+    required String estublishName,
+    required String email,
+    required String password,
+    required File image,
+    required double long,
+    required double lat,
+  }) async {
+    isLoading.value = true;
+
+    errorMessage.value = '';
+    var signupResponse = Rxn<SignupResponse>();
+
+    try {
+      final response = await authRepository.registerEstablishment(
+        estublishName: estublishName,
+        email: email,
+        establishmentType: "cafe", // or select dynamically
+        role: "restaurant",
+        password: password, imageFile: image,
+        latitude: lat,
+        longitude: long,
+      );
+
       signupResponse.value = response;
       isLoading.value = false;
+
       if (response.statusCode >= 200 && response.statusCode < 300) {
         LocalStorageService().saveToken(response.data.signUpToken);
+
         navigateToPage(EnterOtpPage(
           email: email,
           isEmailVerified: true,
         ));
       } else {
-        otpErrorMessage.value = response.message;
+        errorMessage.value = response.message;
       }
     } catch (e) {
       isLoading.value = false;

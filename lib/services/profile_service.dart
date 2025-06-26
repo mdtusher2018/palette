@@ -239,9 +239,8 @@ class ProfileService {
     return UnfavouriteResponse.fromJson(responseJson);
   }
 
-  Future<FolderWiseFavouriteResponse> menuByFolderId(
-      {required String id}) async {
+  Future<FavouriteFoundResponse> menuByFolderId({required String id}) async {
     final responseJson = await apiService.get(ApiEndpoints.menuByFolderId(id));
-    return FolderWiseFavouriteResponse.fromJson(responseJson);
+    return FavouriteFoundResponse.fromJson(responseJson);
   }
 }
