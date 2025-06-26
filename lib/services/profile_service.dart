@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:palette/models/unfavorite_model.dart';
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
+import 'package:palette/models/user%20models/_folder_wise_favorite_menu.dart';
 import 'package:palette/models/user%20models/add_new_log_model.dart';
 import 'package:palette/models/user%20models/catagory_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
@@ -236,5 +237,11 @@ class ProfileService {
   Future<UnfavouriteResponse> unFavorite(Map<String, String> body) async {
     final responseJson = await apiService.post(ApiEndpoints.unFavorite, body);
     return UnfavouriteResponse.fromJson(responseJson);
+  }
+
+  Future<FolderWiseFavouriteResponse> menuByFolderId(
+      {required String id}) async {
+    final responseJson = await apiService.get(ApiEndpoints.menuByFolderId(id));
+    return FolderWiseFavouriteResponse.fromJson(responseJson);
   }
 }

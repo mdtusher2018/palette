@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:palette/models/unfavorite_model.dart';
 import 'package:palette/models/user%20models/UserCurrentChallengeModel.dart';
+import 'package:palette/models/user%20models/_folder_wise_favorite_menu.dart';
 import 'package:palette/models/user%20models/add_new_log_model.dart';
 import 'package:palette/models/user%20models/catagory_model.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
@@ -104,5 +105,9 @@ class ProfileRepository {
     if (menuId != null) body['menu'] = menuId;
 
     return userService.unFavorite(body);
+  }
+
+  Future<FolderWiseFavouriteResponse> menuByFolderId({required String id}) {
+    return userService.menuByFolderId(id: id);
   }
 }

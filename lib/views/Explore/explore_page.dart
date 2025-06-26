@@ -27,18 +27,23 @@ class ExploreScreen extends StatelessWidget {
           title: commonText("Explore",
               size: 20, color: AppColors.white, isBold: true),
         ),
-        bottomSheet: Column(
-          children: [
-            _buildTabBar(),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  _buildListView(),
-                  _buildMapView(),
-                ],
+        bottomSheet: ClipRRect(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+          child: Stack(
+            children: [
+              Expanded(
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    _buildListView(),
+                    _buildMapView(),
+                  ],
+                ),
               ),
-            ),
-          ],
+              _buildTabBar(),
+            ],
+          ),
         ),
       ),
     );
@@ -87,71 +92,75 @@ class ExploreScreen extends StatelessWidget {
             child: commonText("Error: ${controller.errorMessage.value}"));
       }
 
-      return ListView(
-        padding: EdgeInsets.all(16),
-        children: [
-          commonSearchBar(
-              hintText: "Search Restaurant, Dishes",
-              onChanged: (p0) {
-                if (p0.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 60.0),
+        child: ListView(
+          padding: EdgeInsets.all(16),
+          children: [
+            commonSearchBar(
+                hintText: "Search Restaurant, Dishes",
+                onChanged: (p0) {
+                  if (p0.isEmpty) {
+                    controller.updateSearch(_searchController.text.trim());
+                  }
+                },
+                onSubmitted: (value) {
                   controller.updateSearch(_searchController.text.trim());
-                }
-              },
-              onSubmitted: (value) {
-                controller.updateSearch(_searchController.text.trim());
-              },
-              controller: _searchController),
-          SizedBox(height: 16),
-          if (controller.topRestaurants.isEmpty && controller.topMenus.isEmpty)
-            Center(
-                child: commonText("No Result Found", isBold: true, size: 18)),
-          if (controller.topRestaurants.isNotEmpty)
-            commonText("Top Rated Restaurants", size: 18, isBold: true),
-          SizedBox(height: 12),
-          gridSection(
-            controller.topRestaurants.map((restaurant) {
-              return InkWell(
-                onTap: () {
-                  navigateToPage(RestaurantDetailsPage(
-                    id: restaurant.userId,
-                  ));
                 },
-                child: cardDesign(
-                  imageUrl: getFullImagePath(restaurant.image ?? ""),
-                  buttonName: restaurant.cuisines.join(", "),
-                  ratting: restaurant.rating.toString(),
-                  location: restaurant.address,
-                  name: restaurant.fullName,
-                ),
-              );
-            }).toList(),
-            ration: 0.65,
-          ),
-          SizedBox(height: 16),
-          if (controller.topMenus.isNotEmpty)
-            commonText("Top Rated Items", size: 18, isBold: true),
-          SizedBox(height: 12),
-          gridSection(
-            controller.topMenus.map((menu) {
-              return InkWell(
-                onTap: () {
-                  navigateToPage(FoodDetailsPage(
-                    id: menu.id,
-                  ));
-                },
-                child: cardDesign(
-                  imageUrl: getFullImagePath(menu.image ?? ""),
-                  buttonName: menu.category,
-                  ratting: menu.rating.toString(),
-                  location: menu.restaurentAddress,
-                  name: menu.name,
-                  isleft: false,
-                ),
-              );
-            }).toList(),
-            ration: 0.9,
-          ),
-        ],
+                controller: _searchController),
+            SizedBox(height: 16),
+            if (controller.topRestaurants.isEmpty &&
+                controller.topMenus.isEmpty)
+              Center(
+                  child: commonText("No Result Found", isBold: true, size: 18)),
+            if (controller.topRestaurants.isNotEmpty)
+              commonText("Top Rated Restaurants", size: 18, isBold: true),
+            SizedBox(height: 12),
+            gridSection(
+              controller.topRestaurants.map((restaurant) {
+                return InkWell(
+                  onTap: () {
+                    navigateToPage(RestaurantDetailsPage(
+                      id: restaurant.userId,
+                    ));
+                  },
+                  child: cardDesign(
+                    imageUrl: getFullImagePath(restaurant.image ?? ""),
+                    buttonName: restaurant.cuisines.join(", "),
+                    ratting: restaurant.rating.toString(),
+                    location: restaurant.address,
+                    name: restaurant.fullName,
+                  ),
+                );
+              }).toList(),
+              ration: 0.65,
+            ),
+            SizedBox(height: 16),
+            if (controller.topMenus.isNotEmpty)
+              commonText("Top Rated Items", size: 18, isBold: true),
+            SizedBox(height: 12),
+            gridSection(
+              controller.topMenus.map((menu) {
+                return InkWell(
+                  onTap: () {
+                    navigateToPage(FoodDetailsPage(
+                      id: menu.id,
+                    ));
+                  },
+                  child: cardDesign(
+                    imageUrl: getFullImagePath(menu.image ?? ""),
+                    buttonName: menu.category,
+                    ratting: menu.rating.toString(),
+                    location: menu.restaurentAddress,
+                    name: menu.name,
+                    isleft: false,
+                  ),
+                );
+              }).toList(),
+              ration: 0.9,
+            ),
+          ],
+        ),
       );
     });
   }

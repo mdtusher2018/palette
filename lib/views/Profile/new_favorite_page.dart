@@ -190,7 +190,9 @@ class NewFavoritePage extends StatelessWidget {
 
               return InkWell(
                 onTap: () {
-                  navigateToPage(TopicWiseFavoritePage());
+                  navigateToPage(TopicWiseFavoritePage(
+                    folderId: folder.id,
+                  ));
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

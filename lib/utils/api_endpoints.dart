@@ -54,6 +54,7 @@ class ApiEndpoints {
 
   //explore
   static const String exploreList = 'explore/list';
+  static const String nearbyRestaurant = "my-restaurent/map";
 
   //feed
   static const String allFeed = "logs/feed";
@@ -71,4 +72,5 @@ class ApiEndpoints {
   static const String myFavoriteResturent = "favourite/favourite-restaurant";
   static const String myFavoriteMenuFolders = "folder/menu-folders";
   static const String unFavorite = "favourite/unfavourite";
+  static String menuByFolderId(String id) => "favourite/menuByFolder/$id";
 }

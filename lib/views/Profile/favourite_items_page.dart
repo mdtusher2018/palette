@@ -1,34 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:palette/controller/profile%20controller/menu_by_folder_id_controller.dart';
+
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonDesigns.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 
 class TopicWiseFavoritePage extends StatefulWidget {
-  const TopicWiseFavoritePage({super.key});
+  final String folderId; // Pass this in Navigator
+
+  const TopicWiseFavoritePage({super.key, required this.folderId});
 
   @override
   State<TopicWiseFavoritePage> createState() => _TopicWiseFavoritePageState();
 }
 
 class _TopicWiseFavoritePageState extends State<TopicWiseFavoritePage> {
+  late final MenuByFolderId controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(MenuByFolderId(Get.find(), widget.folderId));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: commonText("Romens",
+        title: commonText("Favorites",
             color: AppColors.white, size: 21, isBold: true),
         centerTitle: true,
         leading: commonBackButton(),
       ),
       backgroundColor: AppColors.primary,
-      bottomSheet: Padding(
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: gridSection(_buildFoodCard(), ration: 0.9),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final attribute = controller.folderWiseFavouriteAttribute.value;
+
+          if (attribute == null || attribute.favourites.isEmpty) {
+            return Center(
+                child:
+                    commonText("No favorites found", size: 16, isBold: true));
+          }
+
+          return gridSection(attribute.favourites.map((fav) {
+            final menu = fav.menu;
+            return cardDesign(
+              imageUrl: menu.image,
+              buttonName: menu.category.name.toString(),
+              ratting: menu.rating.toString(),
+              location: menu.restaurent.fullName,
+              name: menu.itemName,
+              isleft: false,
+            );
+          }).toList());
+        }),
       ),
     );
   }
 
-  Widget gridSection(List<Widget> cards, {double ration = 0.7}) {
+  Widget gridSection(List<Widget> cards, {double ration = 0.9}) {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -37,19 +74,5 @@ class _TopicWiseFavoritePageState extends State<TopicWiseFavoritePage> {
       childAspectRatio: ration,
       children: cards,
     );
-  }
-
-  List<Widget> _buildFoodCard() {
-    return List.generate(
-        8,
-        (index) => cardDesign(
-              imageUrl:
-                  "https://dynamic-media.tacdn.com/media/photo-o/2e/d4/44/98/caption.jpg?w=700&h=500&s=1",
-              buttonName: "Signature",
-              ratting: "4.6",
-              location: "Umi Sushi",
-              name: "Miso Ramen",
-              isleft: false,
-            ));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:palette/models/explore/ExploreResponseModel.dart';
+import 'package:palette/models/explore/near_by_resturant.dart';
 import 'package:palette/repositories/explore_repository.dart';
 
 class ExploreController extends GetxController {
@@ -7,6 +8,8 @@ class ExploreController extends GetxController {
 
   var isLoading = false.obs;
   var errorMessage = RxnString();
+
+  RxList<RestaurantAttribute> restaurants = <RestaurantAttribute>[].obs;
 
   var topMenus = <TopMenu>[].obs;
   var topRestaurants = <TopRestaurant>[].obs;
@@ -37,5 +40,24 @@ class ExploreController extends GetxController {
 
   void updateSearch(String query) {
     searchQuery.value = query;
+  }
+
+  Future<void> fetchNearbyRestaurants({
+    required double lat,
+    required double lng,
+  }) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+
+      final result = await _repository.getNearbyRestaurants(lat: lat, lng: lng);
+      restaurants.assignAll(result);
+    } catch (e) {
+      errorMessage.value = 'Failed to fetch restaurants 😢';
+      restaurants.clear();
+      print("🔥 Error in controller: $e");
+    } finally {
+      isLoading.value = false;
+    }
   }
 }
