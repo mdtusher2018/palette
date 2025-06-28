@@ -37,4 +37,25 @@ class MenuByFolderIdController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<void> unFavourite({String? menuId}) async {
+    isLoading.value = true;
+
+    try {
+      final success = await profileRepository.unFavourite(
+        menuId: menuId,
+      );
+
+      if (success.statusCode == 200) {
+        fetchFavouriteMenus();
+        Get.snackbar("Success", "Favourite updated successfully");
+      } else {
+        Get.snackbar("Failed", "Unable to update favourite");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

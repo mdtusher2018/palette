@@ -20,10 +20,13 @@ class HomePage extends StatelessWidget {
   HomePage({super.key, required this.userInfo});
   final String dashboardUrl = 'https://www.palatte.com/dashboard';
 
-  Future<void> _launchDashboard() async {
+  void _launchDashboard() async {
     final Uri url = Uri.parse(dashboardUrl);
     if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+      await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication, // Triggers system browser chooser
+      );
     } else {
       throw 'Could not launch $dashboardUrl';
     }
@@ -149,11 +152,15 @@ class HomePage extends StatelessWidget {
                           return SizedBox(); // or show "No Ads"
                         }
 
-                        List<String> imageUrls = homeController.ads
-                            .map((ad) => getFullImagePath("/${ad.image}"))
-                            .toList();
+                        List<Map<String, String>> items =
+                            homeController.ads.map((ad) {
+                          return {
+                            "image": getFullImagePath(ad.image),
+                            "url": ad.link,
+                          };
+                        }).toList();
 
-                        return AdsCarousel(imageUrls: imageUrls);
+                        return AdsCarousel(items: items);
                       }),
 
                       SizedBox(height: 20),
@@ -413,9 +420,9 @@ class HomePage extends StatelessWidget {
 }
 
 class AdsCarousel extends StatefulWidget {
-  final List<String> imageUrls;
+  final List<Map<String, String>> items; // keys: "image", "url"
 
-  const AdsCarousel({Key? key, required this.imageUrls}) : super(key: key);
+  const AdsCarousel({Key? key, required this.items}) : super(key: key);
 
   @override
   State<AdsCarousel> createState() => _AdsCarouselState();
@@ -431,13 +438,9 @@ class _AdsCarouselState extends State<AdsCarousel> {
   @override
   void initState() {
     super.initState();
-
-    // Start from a high offset to allow infinite left/right scroll
-    _initialPage = widget.imageUrls.isNotEmpty
-        ? widget.imageUrls.length * _kInfiniteOffset
-        : 0;
+    _initialPage =
+        widget.items.isNotEmpty ? widget.items.length * _kInfiniteOffset : 0;
     _pageController = PageController(initialPage: _initialPage);
-
     _startAutoScroll();
   }
 
@@ -461,27 +464,42 @@ class _AdsCarouselState extends State<AdsCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.imageUrls.isEmpty) return const SizedBox();
+    if (widget.items.isEmpty) return const SizedBox();
 
     return SizedBox(
       height: 150,
       child: PageView.builder(
         controller: _pageController,
         itemBuilder: (context, index) {
-          final imageIndex = index % widget.imageUrls.length;
+          final itemIndex = index % widget.items.length;
+          final imageUrl = widget.items[itemIndex]["image"] ?? "";
+          final linkUrl = widget.items[itemIndex]["url"] ?? "";
 
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              widget.imageUrls[imageIndex],
-              width: double.infinity,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const Center(child: CircularProgressIndicator());
-              },
-              errorBuilder: (context, error, stackTrace) => const Center(
-                child: Icon(Icons.broken_image),
+          return InkWell(
+            onTap: () async {
+              final Uri url = Uri.parse(linkUrl);
+              if (await canLaunchUrl(url)) {
+                await launchUrl(
+                  url,
+                  mode: LaunchMode.externalApplication,
+                );
+              } else {
+                throw 'Could not launch $linkUrl';
+              }
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.network(
+                imageUrl,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator());
+                },
+                errorBuilder: (context, error, stackTrace) => const Center(
+                  child: Icon(Icons.broken_image),
+                ),
               ),
             ),
           );

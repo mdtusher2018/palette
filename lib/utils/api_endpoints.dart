@@ -50,7 +50,8 @@ class ApiEndpoints {
   static String getGarallyByRestaurantId(String id) =>
       'gallery/galleryById/$id';
   static String getFeedbackRestaurantId(String id) => 'feedback/restaurant/$id';
-  static const String notification = "notifications/my-notifications";
+  static String notification(String page, String limit) =>
+      'notifications/my-notifications?page=$page&limit=$limit';
 
   //explore
   static const String exploreList = 'explore/list';

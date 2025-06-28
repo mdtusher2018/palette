@@ -107,7 +107,10 @@ class HomeRepository {
     );
   }
 
-  Future<NotificationModel> getNotifications() {
-    return _homeService.fetctNotification();
+  Future<NotificationResponseModel> getNotifications({
+    required int page,
+    required int limit,
+  }) {
+    return _homeService.getNotifications(page: page, limit: limit);
   }
 }

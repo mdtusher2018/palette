@@ -149,8 +149,13 @@ class HomeService {
     return AddFavouriteResponse.fromJson(response);
   }
 
-  Future<NotificationModel> fetctNotification() async {
-    final jsonResponse = await apiService.get(ApiEndpoints.notification);
-    return NotificationModel.fromJson(jsonResponse);
+  Future<NotificationResponseModel> getNotifications({
+    required int page,
+    required int limit,
+  }) async {
+    final response = await apiService
+        .get(ApiEndpoints.notification(page.toString(), limit.toString()));
+
+    return NotificationResponseModel.fromJson(response);
   }
 }

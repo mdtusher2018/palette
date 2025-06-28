@@ -16,6 +16,10 @@ class NewFavoritePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchFavouriteRestaurants();
+      controller.fetchFolders();
+    });
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -190,9 +194,13 @@ class NewFavoritePage extends StatelessWidget {
 
               return InkWell(
                 onTap: () {
-                  navigateToPage(TopicWiseFavoritePage(
-                    folderId: folder.id,
-                  ));
+                  navigateToPage(
+                      TopicWiseFavoritePage(
+                        folderId: folder.id,
+                      ), onPop: (p0) {
+                    controller.fetchFolders();
+                    controller.favouriteRestaurants();
+                  });
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

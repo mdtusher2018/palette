@@ -6,6 +6,7 @@ import 'package:palette/utils/helper.dart';
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonDesigns.dart';
 import 'package:palette/views/res/commonWidgets.dart';
+import 'package:palette/views/res/image_path.dart';
 
 class TopicWiseFavoritePage extends StatelessWidget {
   final String folderId; // Pass this in Navigator
@@ -43,13 +44,30 @@ class TopicWiseFavoritePage extends StatelessWidget {
 
             return gridSection(attribute.favourites.map((fav) {
               final menu = fav.menu;
-              return cardDesign(
-                imageUrl: getFullImagePath(menu.image),
-                buttonName: menu.category.name.toString(),
-                ratting: menu.rating.toString(),
-                location: menu.restaurent.fullName,
-                name: menu.itemName,
-                isleft: false,
+              return Stack(
+                children: [
+                  cardDesign(
+                    imageUrl: getFullImagePath(menu.image),
+                    buttonName: menu.category.name.toString(),
+                    ratting: menu.rating.toString(),
+                    location: menu.restaurent.fullName,
+                    name: menu.itemName,
+                    isleft: false,
+                  ),
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: InkWell(
+                      onTap: () {
+                        controller.unFavourite(menuId: menu.id);
+                      },
+                      child: Image.asset(
+                        AppAssetsPath.delete,
+                        width: 24,
+                      ),
+                    ),
+                  ),
+                ],
               );
             }).toList());
           }),
