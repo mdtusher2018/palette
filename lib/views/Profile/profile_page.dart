@@ -62,11 +62,14 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          commonText(controller.profile.value!.fullName,
-                              size: 18, isBold: true),
+                          if (controller.profile.value != null)
+                            commonText(controller.profile.value!.fullName,
+                                size: 18, isBold: true),
                           SizedBox(width: 6),
-                          Icon(Icons.verified,
-                              color: Colors.blueAccent, size: 18)
+                          if (controller.userProfile.value != null &&
+                              controller.userProfile.value!.verified)
+                            Icon(Icons.verified,
+                                color: Colors.blueAccent, size: 18)
                         ],
                       ),
                       SizedBox(height: 4),

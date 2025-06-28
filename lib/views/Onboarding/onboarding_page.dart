@@ -95,7 +95,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           children: [
                             commonText(
                               item["title"]!,
-                              size: 24,
+                              size: 40,
                               color: AppColors.black,
                               isBold: true,
                               textAlign: TextAlign.center,
