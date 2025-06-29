@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!userInfo.verified) {
+      if (userInfo.role == "admin" && !userInfo.verified) {
         showPendingApprovalDialog();
       }
     });

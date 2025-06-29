@@ -7,6 +7,7 @@ import 'package:palette/models/common_models.dart';
 import 'package:palette/models/user%20models/change_password_model.dart';
 import 'package:palette/models/user%20models/update_user_model.dart';
 import 'package:palette/models/user%20models/user_profile.dart';
+import 'package:palette/services/local_storage_service.dart';
 import '../../repositories/profile_repository.dart';
 
 class UserController extends GetxController {
@@ -32,6 +33,7 @@ class UserController extends GetxController {
       errorMessage.value = '';
       final profileResponse = await userRepository.getUserProfile();
       userProfile.value = profileResponse.attributes;
+      LocalStorageService().saveUserAttributes(profileResponse.attributes);
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;

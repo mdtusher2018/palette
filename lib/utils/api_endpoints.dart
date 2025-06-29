@@ -1,6 +1,6 @@
 class ApiEndpoints {
   static const String baseUrl = 'http://172.252.13.74:8029/api/v1/'; //live
-  static const String imageUrl = 'http://172.252.13.74:8029/';
+  static const String imageUrl = 'http://172.252.13.74:8029';
 
   // static const String baseUrl = 'http://10.0.70.37:8029/api/v1/';
   // static const String imageUrl = 'http://10.0.70.37:8029';
