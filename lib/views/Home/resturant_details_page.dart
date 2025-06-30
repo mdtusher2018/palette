@@ -414,8 +414,6 @@ class RestaurantDetailsPage extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(height: 10),
-        commonSearchBar(),
-        SizedBox(height: 10),
         Column(
           children: List.generate(
             menus.length,

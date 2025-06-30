@@ -15,7 +15,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  final controller = Get.put(ExploreController());
+  ExploreController controller = Get.find<ExploreController>();
   GoogleMapController? _mapController;
 
   LatLng _initialPosition = const LatLng(23.7634868, 90.4323847); // BD center
@@ -46,7 +46,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _buildMarkers() {
-    final markerList = controller.restaurants.map((restaurant) {
+    final markerList = controller.mapresturents.map((restaurant) {
       return Marker(
         markerId: MarkerId(restaurant.id),
         position: LatLng(
@@ -136,43 +136,41 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Scaffold(
-        body: Stack(
-          children: [
-            GoogleMap(
-              initialCameraPosition:
-                  CameraPosition(target: _initialPosition, zoom: zoom),
-              onMapCreated: (controller) => _mapController = controller,
-              markers: _markers,
-              circles:
-                  _pickedLocationCircle != null ? {_pickedLocationCircle!} : {},
-              onTap: _handleMapTap,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-            ),
-            if (controller.isLoading.value)
-              const Center(child: CircularProgressIndicator()),
-            if (controller.errorMessage.value != null &&
-                controller.errorMessage.value!.isNotEmpty)
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Material(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: commonText(controller.errorMessage.value!,
-                          color: AppColors.white),
-                    ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition:
+                CameraPosition(target: _initialPosition, zoom: zoom),
+            onMapCreated: (controller) => _mapController = controller,
+            markers: _markers,
+            circles:
+                _pickedLocationCircle != null ? {_pickedLocationCircle!} : {},
+            onTap: _handleMapTap,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+          ),
+          if (controller.isLoading.value)
+            const Center(child: CircularProgressIndicator()),
+          if (controller.errorMessage.value != null &&
+              controller.errorMessage.value!.isNotEmpty)
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Material(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: commonText(controller.errorMessage.value!,
+                        color: AppColors.white),
                   ),
                 ),
               ),
-          ],
-        ),
-      );
-    });
+            ),
+        ],
+      ),
+    );
   }
 }

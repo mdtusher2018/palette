@@ -42,7 +42,6 @@ dependencies:
   http: ^1.4.0
   flutter_html: ^3.0.0
   html_unescape: ^2.0.0
-  flutter_markdown: ^0.7.7+1
   image: ^4.5.4
   path_provider: ^2.1.5
   http_parser: ^4.1.2

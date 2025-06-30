@@ -116,6 +116,8 @@ class FeedPage extends StatelessWidget {
                             child: buildPostCardDesign(
                                 menuImagePath:
                                     _controller.logs[index].image ?? "",
+                                menuVideoUrl:
+                                    _controller.logs[index].video ?? "",
                                 profileImage:
                                     _controller.logs[index].user.image,
                                 profileName:

@@ -26,6 +26,7 @@ class RestautentReviewsPage extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: Obx(() {
           return buildReviews(
+            maxline: 100000,
             reviews: controller.feedbackList.isNotEmpty
                 ? List.generate(controller.feedbackList.length, (index) {
                     return {

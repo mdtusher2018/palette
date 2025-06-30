@@ -156,6 +156,7 @@ Widget buildPostCardDesign(
     {required String profileImage,
     required String profileName,
     required String menuImagePath,
+    required String menuVideoUrl,
     required String name,
     required String time,
     required String resturant,
@@ -183,20 +184,33 @@ Widget buildPostCardDesign(
               time,
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+          if (menuImagePath.isNotEmpty)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: NetworkImage((menuImagePath.isNotEmpty)
+                        ? getFullImagePath(menuImagePath)
+                        : "https://th.bing.com/th/id/OIP.jUfCu2A6ilKJAdybISEMgwHaHa?rs=1&pid=ImgDetMain&cb=idpwebpc2"),
+                    fit: BoxFit.cover,
+                  ))),
             ),
-            child: Container(
+          if (menuVideoUrl.isNotEmpty)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
                 height: 150,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: NetworkImage((menuImagePath.isNotEmpty)
-                      ? getFullImagePath(menuImagePath)
-                      : "https://th.bing.com/th/id/OIP.jUfCu2A6ilKJAdybISEMgwHaHa?rs=1&pid=ImgDetMain&cb=idpwebpc2"),
-                  fit: BoxFit.cover,
-                ))),
-          ),
+                child: VideoApp(
+                  videoUrl: menuVideoUrl,
+                ),
+              ),
+            ),
           ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 8),
             title: commonText(name, size: 16, isBold: true),
@@ -309,6 +323,7 @@ Widget cardDesign(
 Widget buildReviews(
     {required List<Map<String, dynamic>> reviews,
     bool shrinkWrap = false,
+    int maxline = 5,
     physics}) {
   if (reviews.isEmpty) {
     return Center(
@@ -348,7 +363,7 @@ Widget buildReviews(
             ),
             SizedBox(height: 8),
             commonText(review["text"].toString(),
-                size: 13, maxline: 5, softwarp: true),
+                size: 13, maxline: maxline, softwarp: true),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -389,7 +404,7 @@ Widget buildReviews(
                                   child: InteractiveViewer(
                                     child: VideoApp(
                                         videoUrl:
-                                            "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
+                                            review["video"] ?? "".toString()),
                                   ),
                                 ));
                       },
@@ -401,8 +416,7 @@ Widget buildReviews(
                             height: 100,
                             width: 160,
                             child: VideoApp(
-                                videoUrl:
-                                    "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"
+                                videoUrl: review["video"] ?? "".toString()
                                 // review["video"]
                                 ),
                           ),
@@ -456,7 +470,8 @@ Widget menuCard(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                          child: commonText(name, size: 16.0, isBold: true)),
+                          child: commonText(name,
+                              size: 16.0, isBold: true, maxline: 1)),
                       Row(
                         children: [
                           Icon(Icons.star, color: Colors.amber, size: 16),
@@ -479,6 +494,7 @@ Widget menuCard(
                   ),
                   commonText(
                     description,
+                    maxline: 3,
                     color: AppColors.black,
                   ),
                   SizedBox(height: 4),

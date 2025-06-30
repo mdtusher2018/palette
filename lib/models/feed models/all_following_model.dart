@@ -42,7 +42,8 @@ class FollowingUser {
       id: json['_id'] ?? '',
       fullName: json['fullName'] ?? '',
       image: json['image'] ?? '',
-      isFollowing: true, // always default true unless handled manually
+      isFollowing:
+          json['isFollowing'], // always default true unless handled manually
     );
   }
 }

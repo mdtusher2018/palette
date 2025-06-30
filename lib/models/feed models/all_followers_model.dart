@@ -42,7 +42,7 @@ class FollowerUser {
       id: json['_id'] ?? '',
       fullName: json['fullName'] ?? '',
       image: json['image'] ?? '',
-      isFollower: true,
+      isFollower: json['isFollowing'] ?? false,
     );
   }
 }

@@ -129,6 +129,11 @@ class SignUpPage extends StatelessWidget {
                       commonSnackbar(context, "Please fill all fields");
                       return;
                     }
+                    if (password.length < 6) {
+                      commonSnackbar(
+                          context, "Password must be at least 6 character");
+                      return;
+                    }
 
                     authController.signUp(fullName, email, password,
                         isAdmin: isAdmin ?? false);

@@ -21,6 +21,13 @@ class _VideoAppState extends State<VideoApp> {
   @override
   void initState() {
     super.initState();
+
+    final uri = Uri.parse(widget.videoUrl);
+
+    if (uri.scheme == 'http') {
+      print('http');
+    }
+
     if (widget.isLocal) {
       // If the video is local, use the file path
       _controller = VideoPlayerController.file(File(widget.videoUrl))

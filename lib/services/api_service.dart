@@ -127,9 +127,13 @@ class ApiService {
     final resBody = await response.stream.bytesToString();
 
     final statusCode = response.statusCode;
+    log(resBody);
     if (statusCode >= 200 && statusCode < 300) {
       return json.decode(resBody);
     } else {
+      if (statusCode == 409) {
+        throw Exception('Review already submitted. Only one allowed.');
+      }
       throw Exception('Failed to post feedback: ${response.statusCode}');
     }
   }

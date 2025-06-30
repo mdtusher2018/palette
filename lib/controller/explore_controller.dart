@@ -10,6 +10,7 @@ class ExploreController extends GetxController {
   var errorMessage = RxnString();
 
   RxList<RestaurantAttribute> restaurants = <RestaurantAttribute>[].obs;
+  RxList<RestaurantAttribute> mapresturents = <RestaurantAttribute>[].obs;
 
   var topMenus = <TopMenu>[].obs;
   var topRestaurants = <TopRestaurant>[].obs;
@@ -51,7 +52,7 @@ class ExploreController extends GetxController {
       errorMessage.value = '';
 
       final result = await _repository.getNearbyRestaurants(lat: lat, lng: lng);
-      restaurants.assignAll(result);
+      mapresturents.assignAll(result);
     } catch (e) {
       errorMessage.value = 'Failed to fetch restaurants 😢';
       restaurants.clear();

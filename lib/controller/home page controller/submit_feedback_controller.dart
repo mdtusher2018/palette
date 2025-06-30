@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -69,6 +70,7 @@ class SubmitFeedbackController extends GetxController {
       rating.value = 0;
       clearMedia();
     } catch (e) {
+      log(e.toString());
       Get.snackbar('Error', e.toString());
     } finally {
       isLoading.value = false;

@@ -29,8 +29,6 @@ class MenusScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            commonSearchBar(),
-            const SizedBox(height: 10),
             Expanded(
               child: Obx(() {
                 if (controller.isLoadingMenus.value) {

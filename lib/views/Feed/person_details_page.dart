@@ -183,6 +183,7 @@ class PersonDetailsPage extends StatelessWidget {
                             profileImage: data.image,
                             profileName: data.fullName,
                             menuImagePath: log.image,
+                            menuVideoUrl: log.video,
                             name: log.itemName ?? "N/A",
                             time: getTimeDifference(log.createdAt.toString()),
                             resturant: log.restaurent,

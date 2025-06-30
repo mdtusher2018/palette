@@ -23,7 +23,7 @@ class FoodReviewsPage extends StatelessWidget {
       backgroundColor: AppColors.primary,
       bottomSheet: Padding(
         padding: EdgeInsets.all(16),
-        child: buildReviews(reviews: reviews),
+        child: buildReviews(reviews: reviews, maxline: 100000),
       ),
     );
   }

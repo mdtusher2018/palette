@@ -75,11 +75,14 @@ class FoodDetailsPage extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.location_pin,
-                                  size: 16, color: AppColors.black),
+                              if (controller
+                                  .menuDetails.value!.restaurentName.isNotEmpty)
+                                Icon(Icons.location_pin,
+                                    size: 16, color: AppColors.black),
                               SizedBox(width: 4),
                               commonText(
                                   controller.menuDetails.value!.restaurentName,
+                                  isBold: true,
                                   size: 14),
                             ],
                           ),

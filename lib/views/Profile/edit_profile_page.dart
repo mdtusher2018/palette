@@ -182,6 +182,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 Get.snackbar("Empty Field", "Name can't be empty");
               } else if (phoneController.text.isEmpty) {
                 Get.snackbar("Empty Field", "Phone number can't be empty");
+              } else if (phoneController.text.length < 8 ||
+                  phoneController.text.length > 15) {
+                Get.snackbar("Invalid Field", "Invalid Phone number.");
               } else {
                 controller.updateUserProfile(
                     fullName: nameController.text,

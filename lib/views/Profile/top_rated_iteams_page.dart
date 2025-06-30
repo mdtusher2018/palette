@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:palette/controller/profile%20controller/top_reated_controller.dart';
 
 import 'package:palette/models/user%20models/top_reated_iteams_model.dart';
+import 'package:palette/utils/helper.dart';
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 import 'package:palette/views/res/image_path.dart';
@@ -69,7 +70,7 @@ class TopRatedItemsPage extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(6),
               child: Image.network(
-                item.menuImage ?? '',
+                getFullImagePath(item.menuImage ?? ''),
                 width: 50,
                 height: 50,
                 fit: BoxFit.cover,
