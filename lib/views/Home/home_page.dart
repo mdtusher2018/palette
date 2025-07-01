@@ -15,7 +15,7 @@ import 'package:palette/views/Notification/notifications_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
-  final HomeController homeController = Get.put(HomeController());
+  final HomeController homeController = Get.find<HomeController>();
   UserAttributes userInfo;
   HomePage({super.key, required this.userInfo});
   final String dashboardUrl = 'https://www.palatte.com/dashboard';

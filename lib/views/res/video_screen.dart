@@ -1,8 +1,10 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:palette/utils/helper.dart';
 import 'package:video_player/video_player.dart';
 
 /// Stateful widget to fetch and then display video content.
@@ -22,10 +24,12 @@ class _VideoAppState extends State<VideoApp> {
   void initState() {
     super.initState();
 
-    final uri = Uri.parse(widget.videoUrl);
+    final uri = Uri.parse(getFullImagePath(widget.videoUrl));
+    log(uri.toString() + ".......................");
 
-    if (uri.scheme == 'http') {
-      print('http');
+    if (widget.videoUrl.isEmpty || uri.scheme == 'http') {
+      widget.videoUrl =
+          "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4";
     }
 
     if (widget.isLocal) {
@@ -37,7 +41,8 @@ class _VideoAppState extends State<VideoApp> {
           _controller.play(); // Automatically play the video once initialized
         });
     } else {
-      _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
+      _controller = VideoPlayerController.networkUrl(
+          Uri.parse(getFullImagePath(widget.videoUrl)))
         ..setLooping(true)
         ..initialize().then((_) {
           setState(() {});

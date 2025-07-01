@@ -3,7 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette/controller/explore_controller.dart';
+import 'package:palette/controller/feed%20controller/feed_controller.dart';
+import 'package:palette/controller/home%20page%20controller/home_controller.dart';
+import 'package:palette/controller/profile%20controller/user_controller.dart';
 import 'package:palette/models/common_models.dart';
+import 'package:palette/repositories/profile_repository.dart';
+import 'package:palette/services/api_service.dart';
+import 'package:palette/services/profile_service.dart';
 import 'package:palette/views/res/image_path.dart';
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonWidgets.dart';
@@ -38,6 +44,9 @@ class _RootPageState extends State<RootPage> {
     // TODO: implement initState
     super.initState();
     Get.put(ExploreController());
+    Get.put(HomeController());
+    Get.put(FeedController());
+    Get.put(UserController(ProfileRepository(ProfileService(ApiService()))));
     pages = [
       HomePage(
         userInfo: widget.userInfo,
@@ -46,6 +55,17 @@ class _RootPageState extends State<RootPage> {
       FeedPage(),
       ProfilePage()
     ];
+  }
+
+  void _onPageChanged(int index) {
+    setState(() => _selectedIndex = index);
+
+    switch (index) {
+      case 0:
+        final HomeController homeController = Get.find<HomeController>();
+        homeController.fetchUserStatus();
+        break;
+    }
   }
 
   void _onTap(int index) {
@@ -61,6 +81,8 @@ class _RootPageState extends State<RootPage> {
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
+        onPageChanged: _onPageChanged, // 👈 Add this
+
         children: pages,
       ),
 

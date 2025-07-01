@@ -49,6 +49,7 @@ class MyProfileAttributes {
   String id;
   String fullName;
   String image;
+  String title;
   int followers;
   int following;
   List<Badge> badges; // <-- updated
@@ -58,6 +59,7 @@ class MyProfileAttributes {
     required this.id,
     required this.fullName,
     required this.image,
+    required this.title,
     required this.followers,
     required this.following,
     required this.badges, // <-- updated
@@ -69,6 +71,7 @@ class MyProfileAttributes {
       id: json['_id'],
       fullName: json['fullName'] ?? "",
       image: json['image'] ?? "",
+      title: json['title'] ?? "Zero",
       followers: json['followers'] ?? 0,
       following: json['following'] ?? 0,
       badges:

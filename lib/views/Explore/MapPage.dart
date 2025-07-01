@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:palette/controller/explore_controller.dart';
 import 'package:palette/models/explore/near_by_resturant.dart';
+import 'package:palette/views/Home/resturant_details_page.dart';
 import 'package:palette/views/res/colors.dart';
 import 'package:palette/views/res/commonWidgets.dart';
 
@@ -74,32 +75,17 @@ class _MapPageState extends State<MapPage> {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
+      isScrollControlled: true, // 👈 Required to allow custom height
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(restaurant.fullName,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
-              Text(
-                'Lat: ${restaurant.location.latitude}, Lng: ${restaurant.location.longitude}',
-                style: TextStyle(color: Colors.grey[700]),
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  // You can also navigate to detail page here if needed
-                },
-                child: Text("Close"),
-              )
-            ],
-          ),
+        return ClipRRect(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          child: SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.7, // 👈 70% height
+              child: RestaurantDetailsPage(id: restaurant.id)),
         );
       },
     );

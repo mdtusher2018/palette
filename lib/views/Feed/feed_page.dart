@@ -10,7 +10,7 @@ import 'package:palette/views/Feed/post_details_page.dart';
 
 class FeedPage extends StatelessWidget {
   FeedPage({super.key});
-  final FeedController _controller = Get.put(FeedController());
+  final FeedController _controller = Get.find<FeedController>();
 
   @override
   Widget build(BuildContext context) {

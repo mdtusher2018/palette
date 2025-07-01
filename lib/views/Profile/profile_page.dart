@@ -21,8 +21,7 @@ import 'package:palette/views/Profile/top_rated_iteams_page.dart';
 import '../../controller/profile controller/user_controller.dart';
 
 class ProfilePage extends StatelessWidget {
-  UserController controller =
-      Get.put(UserController(ProfileRepository(ProfileService(ApiService()))));
+  UserController controller = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +72,22 @@ class ProfilePage extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 4),
-                      commonSmallButton(
-                        text: "Explorer Palette",
-                        width: 120,
-                        borderWidth: 0,
-                        color: AppColors.primary,
-                        textColor: AppColors.white,
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 4),
+                        decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            borderRadius: BorderRadius.circular(16)),
+                        child: commonText(controller.profile.value!.title,
+                            color: AppColors.white),
                       ),
+                      // commonSmallButton(
+                      //   text: controller.profile.value!.title,
+                      //   width: 120,
+                      //   borderWidth: 0,
+                      //   color: AppColors.primary,
+                      //   textColor: AppColors.white,
+                      // ),
                       SizedBox(height: 8),
                       commonSmallButton(
                         text: "Profile Settings",
