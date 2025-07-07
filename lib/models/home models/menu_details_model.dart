@@ -51,6 +51,7 @@ class FoodMenuAttributes {
   List<FoodFeedbackModel> feedbacks;
   String restaurentName;
   String restaurentId;
+  bool  isFavourite;
 
   FoodMenuAttributes({
     required this.id,
@@ -63,6 +64,7 @@ class FoodMenuAttributes {
     required this.feedbacks,
     required this.restaurentName,
     required this.restaurentId,
+    required this.isFavourite
   });
 
   factory FoodMenuAttributes.fromJson(Map<String, dynamic> json) {
@@ -80,6 +82,7 @@ class FoodMenuAttributes {
           : [],
       restaurentName: json['restaurentName'],
       restaurentId: json['restaurentId'],
+      isFavourite:  json["isFavourite"]??false,
     );
   }
 }

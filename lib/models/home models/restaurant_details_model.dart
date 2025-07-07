@@ -53,6 +53,7 @@ class RestaurantAttributes {
   final List<RestaurantFeedback> feedbacks;
   final List<String> gallery;
   final List<RestaurantMenu> menus;
+    bool  isFavourite; 
 
   RestaurantAttributes({
     this.id,
@@ -64,7 +65,7 @@ class RestaurantAttributes {
     this.restaurant,
     required this.feedbacks,
     required this.gallery,
-    required this.menus,
+    required this.menus,  required this.isFavourite
   });
 
   factory RestaurantAttributes.fromJson(Map<String, dynamic> json) {
@@ -86,7 +87,7 @@ class RestaurantAttributes {
       menus: (json['menus'] as List?)
               ?.map((m) => RestaurantMenu.fromJson(m))
               .toList() ??
-          [],
+          [],     isFavourite:  json["isFavourite"]??false,
     );
   }
 }

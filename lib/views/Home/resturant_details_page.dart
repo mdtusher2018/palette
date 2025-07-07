@@ -134,14 +134,14 @@ class RestaurantDetailsPage extends StatelessWidget {
                         Expanded(
                           child: OutlinedButton.icon(
                             onPressed: () {
-                              controller.fetchFolders().then(
-                                (value) {
+                             
                                   controller.addFavourite(
                                       restaurantId: id, folderId: "");
-                                },
-                              );
+                                      
+                                controller.fetchRestaurantDetails(id);
+                              
                             },
-                            icon: Icon(Icons.favorite_border,
+                            icon: Icon((controller.restaurantDetails.value!.isFavourite)?Icons.favorite:Icons.favorite_border,
                                 color: AppColors.primary),
                             label: commonText("Add To Favorite",
                                 color: AppColors.primary, isBold: true),

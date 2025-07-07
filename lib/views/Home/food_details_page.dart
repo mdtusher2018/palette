@@ -131,12 +131,13 @@ class FoodDetailsPage extends StatelessWidget {
                                     onFolderTap: (folderId) {
                                       controller.addFavourite(
                                           restaurantId: id, folderId: folderId);
+                                          controller.fetchMenu(id);
                                     },
                                   );
                                 },
                               );
                             },
-                            icon: Icon(Icons.favorite_border,
+                            icon: Icon((controller.menuDetails.value!.isFavourite)?Icons.favorite:Icons.favorite_border,
                                 color: AppColors.primary),
                             label: commonText("Add To Favorite",
                                 color: AppColors.primary, isBold: true),
