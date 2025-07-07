@@ -136,11 +136,11 @@ class ProfileSettingsPage extends StatelessWidget {
                       const SizedBox(height: 10),
                       InkWell(
                         onTap: () async {
-                          // Clear all local storage data
-                          await LocalStorageService().removeToken();
+showLogoutConfirmationDialog(context);
+                          // await LocalStorageService().removeToken();
 
-                          // Navigate to SignInPage and remove all previous routes
-                          Get.offAll(() => SignInPage());
+                          // // Navigate to SignInPage and remove all previous routes
+                          // Get.offAll(() => SignInPage());
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -186,4 +186,88 @@ class ProfileSettingsPage extends StatelessWidget {
       ),
     );
   }
+
+
+
+void showLogoutConfirmationDialog(BuildContext context) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: false,
+    barrierLabel: "Logout Dialog",
+    pageBuilder: (_, __, ___) => const SizedBox.shrink(), // Required by API
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              padding: EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+           
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.logout, color: Colors.red.shade800, size: 40),
+                  SizedBox(height: 16),
+                  commonText(
+                    'Confirm Logout',
+                   
+                      size: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red.shade800,
+                
+                  ),
+                  SizedBox(height: 12),
+                  commonText(
+                    'Are you sure you want to log out?',
+                    textAlign: TextAlign.center,
+                  size: 16
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(child: commonButton("Logout",
+                      borderRadious: 8,
+                      height: 35,
+                      color: Colors.red.shade700,
+                      textSize: 14,textColor: Colors.white,
+                      onTap: () async{
+                                    await LocalStorageService().removeToken();
+                          Get.offAll(() => SignInPage());
+                      },)),SizedBox(width: 16,),
+                   Expanded(child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 2,color: Colors.red.shade700),borderRadius: BorderRadius.circular(8)
+                    ),
+                     child: commonButton("Cancel",
+                        borderRadious: 8,
+                        height: 32,
+                        color: Colors.white,
+                        textSize: 14,textColor: Colors.red.shade700,
+                     onTap: (){
+                         Navigator.of(context).pop();
+                     }),
+                   ))
+                  
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+    transitionDuration: Duration(milliseconds: 250),
+  );
+}
+
+
+
 }

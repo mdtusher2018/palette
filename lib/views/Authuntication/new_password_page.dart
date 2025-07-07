@@ -78,7 +78,10 @@ class NewPasswordPage extends StatelessWidget {
                     commonSnackbar(context, "Please fill both password fields");
                     return;
                   }
-
+                   if (newPassword.length<6) {
+                    commonSnackbar(context, "Password must be 6 character.");
+                    return;
+                  }
                   if (newPassword != confirmPassword) {
                     commonSnackbar(context, "Passwords do not match");
                     return;
