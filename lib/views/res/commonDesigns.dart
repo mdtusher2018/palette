@@ -106,6 +106,7 @@ Widget challengeCard(SingleChallenge data) {
 Widget buildLogsCardDesign({
   required String iteamName,
   required String image,
+  required String video,
   required String restaurent,
   required String ratting,
 }) {
@@ -117,20 +118,33 @@ Widget buildLogsCardDesign({
     ),
     child: Column(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: EdgeInsets.all(8),
-          child: Container(
-              height: 150,
+        if (image.isNotEmpty)
+            Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                    image: NetworkImage(getFullImagePath(image)),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: NetworkImage((image.isNotEmpty)
+                        ? getFullImagePath(image)
+                        : "https://th.bing.com/th/id/OIP.jUfCu2A6ilKJAdybISEMgwHaHa?rs=1&pid=ImgDetMain&cb=idpwebpc2"),
                     fit: BoxFit.cover,
                   ))),
-        ),
+            ),
+          if (video.isNotEmpty)
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                height: 150,
+                child: VideoApp(
+                  videoUrl: video,
+                ),
+              ),
+            ),
         ListTile(
           title: commonText(iteamName, size: 16, isBold: true),
           subtitle: Row(

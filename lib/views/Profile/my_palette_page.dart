@@ -189,12 +189,10 @@ class MyPalettePage extends StatelessWidget {
                 id: controller.logs[index].id,
               ));
             },
-            child: buildLogsCardDesign(
+            child: buildLogsCardDesign(video:controller.logs[index].video??"" ,
                 iteamName: controller.logs[index].itemName.toString(),
-                image: (controller.logs[index].image != null &&
-                        controller.logs[index].image!.isNotEmpty)
-                    ? getFullImagePath(controller.logs[index].image!)
-                    : "https://th.bing.com/th/id/OIP.jUfCu2A6ilKJAdybISEMgwHaHa?rs=1&pid=ImgDetMain&cb=idpwebpc2",
+                image: 
+                    controller.logs[index].image??"",
                 restaurent: controller.logs[index].restaurent,
                 ratting: controller.logs[index].rating.toString()));
       },
